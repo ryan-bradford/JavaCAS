@@ -10,7 +10,7 @@ public class Function {
 	public Function(String base) {
 		function = base;
 	}
-	
+
 	public double integralOfFunc(double start, double end, double interval) {
 		double total = 0;
 		for (double i = start; i < end; i += interval) {
@@ -18,7 +18,7 @@ public class Function {
 		}
 		return total;
 	}
-	
+
 	public double biggestDerivOfFunc(double start, double end, double interval) {
 		double biggest = 0;
 		Double first = null;
@@ -39,30 +39,61 @@ public class Function {
 	}
 
 	public double derivOfFunc(double pos, double interval) {
-		return (this.getValueAt(pos + interval/2) - this.getValueAt(pos - interval/2)) / interval;
+		return (this.getValueAt(pos + interval / 2) - this.getValueAt(pos - interval / 2)) / interval;
 	}
-	
-	public void insertFunc(String toInsert) {
-		String newFunction = "";
-		String[] parts = function.split("x");
-		newFunction = parts[0];
-		newFunction += toInsert;
-		newFunction += ")";
-		function = newFunction;
+
+	public boolean insertFunc(String toInsert) { // 1 + x + e^2^(x)
+		if (!function.contains("x")) {
+			return false;
+		}
+		ArrayList<String> parts = this.functionParts(function);
+		int placeToInsert = (int) (Math.random() * parts.size());
+		String chosen = parts.get(placeToInsert);
+		String[] halves = chosen.split("x");
+		String newPart = "";
+		if (halves.length == 1) {
+			return insertFunc(toInsert);
+		} else if (halves.length == 0) {
+			newPart = toInsert;
+		} else {
+			newPart = halves[0] + toInsert + halves[1];
+		}
+		int start = 0;
+		int counter = 0;
+		for (int i = 0; i < function.length(); i++) {
+			if (counter == placeToInsert) {
+				start = i;
+				break;
+			}
+			if (function.charAt(i) == '+' || function.charAt(i) == '-' || function.charAt(i) == '*') {
+				counter++;
+			}
+		}
+		while (function.charAt(start) == '[' || function.charAt(start) == ']' || function.charAt(start) == '+'
+				|| function.charAt(start) == '-' || function.charAt(start) == '*') {
+			start++;
+		}
+
+		int end = start + chosen.length() - 1;
+		function = function.substring(0, start) + newPart + function.substring(end + 1, function.length());
+		return true;
 	}
 
 	public void addFunc(String toAdd) {
 		function += "+";
 		function += toAdd;
-		function += "";
+	}
+
+	public void multiplyFunc(String toMultiply) {
+		function += "*";
+		function += toMultiply;
 	}
 
 	public void subtractFunc(String toSubtract) {
 		function += "-";
 		function += toSubtract;
-		function += "";
 	}
-	
+
 	public double getValueAt(double position) {
 		String workingFunction = function.toString();
 		ArrayList<String> parts = functionParts(workingFunction);
@@ -86,14 +117,15 @@ public class Function {
 	}
 
 	public double doAdditionOrSubtraction(String function, ArrayList<Double> currentVals) {
-		double total = currentVals.get(0);
+		double total = 0;
+		total = currentVals.get(0);
 		int counter = 0;
 		for (int i = 0; i < function.length(); i++) {
 			if (function.charAt(i) == '+') {
-				total += currentVals.get(counter);
+				total += currentVals.get(counter + 1);
 				counter++;
 			} else if (function.charAt(i) == '-') {
-				total -= currentVals.get(counter);
+				total -= currentVals.get(counter + 1);
 				counter++;
 			}
 		}
@@ -101,7 +133,6 @@ public class Function {
 	}
 
 	public ArrayList<Double> doMultiplication(String function, ArrayList<Double> currentVals) {
-		int counter = 0;
 		int numOfMultiply = 0;
 		for (int i = 0; i < function.length(); i++) {
 			if (function.charAt(i) == '*') {
@@ -109,11 +140,13 @@ public class Function {
 			}
 		}
 		for (int x = 0; x < numOfMultiply; x++) {
+			int counter = 0;
 			for (int i = 1; i < function.length(); i++) {
 				if (function.charAt(i) == '*') {
 					currentVals.set(counter, currentVals.get(counter) * currentVals.get(counter + 1));
 					currentVals.remove(counter + 1);
 					counter++;
+					break;
 				} else if (function.charAt(i) == '+') {
 					counter++;
 				}
@@ -141,9 +174,19 @@ public class Function {
 		String[] parts = function.split("\\[|\\]");
 		ArrayList<Integer> domain = new ArrayList<Integer>();
 		domain.add(0);
+		int counter = 0;
 		for (int i = 0; i < function.length(); i++) {
+			if (function.charAt(i) == '+') {
+				counter++;
+			}
+			if (function.charAt(i) == '-') {
+				counter++;
+			}
+			if (function.charAt(i) == '*') {
+				counter++;
+			}
 			if (function.charAt(i) == '[' || function.charAt(i) == ']') {
-				domain.add(i);
+				domain.add(counter);
 			}
 		}
 		domain.add(function.length() - 1);
@@ -153,7 +196,7 @@ public class Function {
 		ArrayList<Double> toReturn = new ArrayList<Double>();
 		if (parts.length % 2 == 0) {
 			for (int i = 1; i < parts.length; i += 2) {
-				for (int x = domain.get(i - 1); x < domain.get(i) - 1; x++) {
+				for (int x = domain.get(i - 1); x < domain.get(i); x++) {
 					if (parts[i - 1].contains("x") || parts[i - 1].contains("1")) {
 						toReturn.add(currentVals.get(x));
 					}
@@ -161,13 +204,13 @@ public class Function {
 				toReturn.add(getValueAt(position, parts[i], true));
 			}
 		} else {
-			for (int i = 0; i < parts.length ; i += 2) {
+			for (int i = 0; i < parts.length; i += 2) {
 				for (int x = domain.get(i); x < domain.get(i + 1); x++) {
 					if (parts[i].contains("x") || parts[i].contains("1")) {
 						toReturn.add(currentVals.get(i));
 					}
 				}
-				if(i != parts.length - 1) {
+				if (i != parts.length - 1) {
 					toReturn.add(getValueAt(position, parts[i + 1], true));
 				}
 			}
@@ -179,7 +222,7 @@ public class Function {
 		ArrayList<Double> values = new ArrayList<Double>();
 		for (String part : parts) {
 			String[] inners = part.split("\\(");
-			double val = at;
+			double val = 0;
 			for (int i = inners.length - 1; i >= 0; i--) {
 				String inner = inners[i];
 				inner = inner.split("\\)")[0];
@@ -201,8 +244,10 @@ public class Function {
 					val = Math.atan(val);
 				} else if (inner.equals("1/")) {
 					val = 1 / val;
+				} else if (inner.equals("ln")) {
+					val = Math.log(val);
 				} else {
-					val = this.getValueAt(val, inner, true);
+					// val = this.getValueAt(val, inner, true);
 				}
 			}
 			values.add(val);
@@ -212,7 +257,7 @@ public class Function {
 	}
 
 	public ArrayList<String> functionParts(String function) {
-		ArrayList<String> parts = new ArrayList<String>(Arrays.asList(function.split("-|\\+|\\*|\\[|\\]")));
+		ArrayList<String> parts = new ArrayList<String>(Arrays.asList(function.split("-|\\+|\\*")));
 		for (int i = 0; i < parts.size(); i++) {
 			if (parts.get(i).equals("")) {
 				parts.remove(i);
