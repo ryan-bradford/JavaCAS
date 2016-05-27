@@ -18,7 +18,6 @@ public class Functionv2 {
 		int end = 0;
 		String newBase = "";
 		while (baseFunction.substring(end, baseFunction.length()).contains("-")) {
-			System.out.println(baseFunction);
 			for (int i = end; i < baseFunction.length(); i++) {
 				if (baseFunction.charAt(i) == '-') {
 					if (i == 0 || isOpperator(baseFunction.charAt(i - 1))) {
@@ -38,7 +37,7 @@ public class Functionv2 {
 	}
 
 	public boolean isOpperator(char stuff) {
-		if (stuff == '+' || stuff == '-' || stuff == '/' || stuff == '*' || stuff == '^' || stuff == '(' || stuff == ')') {
+		if (stuff == '+' || stuff == '-' || stuff == '/' || stuff == '*' || stuff == '^' || stuff == '(' || stuff == ')'|| stuff == 'n'|| stuff == 's'|| stuff == 'E') {
 			return true;
 		}
 		return false;
@@ -91,8 +90,23 @@ public class Functionv2 {
 	}
 
 	public ArrayList<String> splitAtAddSub(String function) {
-		String[] split = function.split("\\+|\\-");
-		return new ArrayList<String>(Arrays.asList(split));
+		ArrayList<String> split = new ArrayList<String>();
+		int last = 0;
+		for(int i = 0; i < function.length(); i++) {
+			if(function.charAt(i) == '+') {
+				split.add(function.substring(last, i));
+				last = i;
+			} else if(function.charAt(i) == '-') {
+				if(i > 0 && !isOpperator(function.charAt(i - 1))) {
+					split.add(function.substring(last, i));
+					last = i;
+				}
+			}
+		}
+		if(split.size() == 0) {
+			split.add(function);
+		}
+		return split;
 	}
 
 	public double getValueAt(double at) {
@@ -111,7 +125,7 @@ public class Functionv2 {
 				values.set(count + 1, values.get(count) + values.get(count + 1));
 				values.remove(count);
 			}
-			if (x == '-') {
+			if (x == '-' && i > 0 && !isOpperator(function.charAt(i-1))) {
 				values.set(count + 1, values.get(count) - values.get(count + 1));
 				values.remove(count);
 			}
@@ -145,6 +159,7 @@ public class Functionv2 {
 		boolean negative = false;
 		if (z.contains("-") && z.charAt(0) == '-') {
 			negative = true;
+			z = z.substring(1, z.length());
 		}
 		if (z.equals("x")) {
 			toReturn = at;

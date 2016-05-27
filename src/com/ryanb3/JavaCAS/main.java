@@ -12,8 +12,6 @@ public class main {
 		new main();
 	}
 
-	//Problems with negatives
-
 	public main() {
 		extremasStart();
 		//functionStart();
