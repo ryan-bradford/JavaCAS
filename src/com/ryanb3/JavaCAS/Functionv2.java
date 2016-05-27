@@ -9,31 +9,6 @@ public class Functionv2 {
 
 	public Functionv2(String function) {
 		this.baseFunction = function;
-		//System.out.println(baseFunction);
-		//addNegatives();
-		//System.out.println(baseFunction);
-	}
-
-	public void addNegatives() {
-		int end = 0;
-		String newBase = "";
-		while (baseFunction.substring(end, baseFunction.length()).contains("-")) {
-			for (int i = end; i < baseFunction.length(); i++) {
-				if (baseFunction.charAt(i) == '-') {
-					if (i == 0 || isOpperator(baseFunction.charAt(i - 1))) {
-						newBase += baseFunction.substring(0, i);
-						newBase += "0-";
-						newBase += baseFunction.subSequence(i + 1, baseFunction.length());
-					}
-					end = i + 1;
-					break;
-				}
-			}
-		}
-		if(newBase.equals("")) {
-			return;
-		}
-		baseFunction = newBase;
 	}
 
 	public boolean isOpperator(char stuff) {
@@ -212,7 +187,7 @@ public class Functionv2 {
 	}
 
 	public double derivOfFunc(double pos, double interval) {
-		return (this.getValueAt(pos + interval) - this.getValueAt(pos)) / interval;
+		return (this.getValueAt(pos + interval / 2) - this.getValueAt(pos - interval / 2)) / interval;
 	}
 
 	public double biggestDerivOfFunc(double start, double end, double interval) {
