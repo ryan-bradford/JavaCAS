@@ -12,24 +12,20 @@ public class main {
 		new main();
 	}
 
-	// Many Grouping
-	// Opperations within Compositon
+	//Problems with negatives
 
 	public main() {
-		String entered = JOptionPane.showInputDialog("Enter a function that you want the integral of:");
+		String entered = JOptionPane.showInputDialog("Enter a function that you want the number of extremas:");
 		Functionv2 text = new Functionv2(entered);
+		//System.out.println(text.getValueAt(0.0001));
 		Double start = Double.parseDouble(JOptionPane.showInputDialog("Start x"));
 		Double end = Double.parseDouble(JOptionPane.showInputDialog("End x"));
 		Double interval = Double.parseDouble(JOptionPane.showInputDialog("What is the interval?"));
-		JOptionPane.showMessageDialog(null, "The integral from " + start + " to " + end + " is: " + text.integralOfFunc(start, end, interval));
+		JOptionPane.showMessageDialog(null, "The # from " + start + " to " + end + " is: " + text.getNumberOfExtremas(start, end, interval));
 		System.exit(1);
-		//Function test = new Function("2^(x)*ln(x)*ln(x)*ln(x)*ln(x)");
-		//System.out.println(test.getValueAt(5));
-		//String best = getBestIntegral(1, 5, .1, 50);
-		//System.out.println(best);
-		//System.out.println(new Function(best).integralOfFunc(1, 5, .001));
 	}
 	
+	/*
 	public String mostExtremas(double start, double end, double interval, int moneyToSpend) {
 		double bestIntegral = 0;
 		String function = "";
@@ -127,4 +123,5 @@ public class main {
 		}
 		return getRandomPart(moneyToSpend);
 	}
+	*/
 }

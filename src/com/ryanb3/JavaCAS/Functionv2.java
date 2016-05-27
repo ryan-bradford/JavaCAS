@@ -89,16 +89,7 @@ public class Functionv2 {
 		for (String y : firstSplit) {
 			ArrayList<String> secondSplit = this.splitAtMultiDiv(y);
 			for (String z : secondSplit) {
-				if (z.equals("x")) {
-					values.add(at);
-				} else if(z.equals("x^2")) {
-					values.add(Math.pow(at, 2));
-				} else if(z.contains("^")) {
-					String[] halves = z.split("\\^");
-					values.add(Math.pow(Double.parseDouble(halves[0]), Double.parseDouble(halves[1])));
-				} else {
-					values.add(Double.parseDouble(z));
-				}
+				values.add(this.getValueOfPart(z, at));
 			}
 			int count = 0;
 			for(char stuff: y.toCharArray()) {
@@ -114,12 +105,29 @@ public class Functionv2 {
 		}
 		return values;
 	}
-
-	public double getValueOfPart(double at, String function) {
-		if (function == "x") {
+	
+	public double getValueOfPart(String z, double at) {
+		if (z.equals("x")) {
 			return at;
-		} else {
-			return 0;
+		} else if(z.contains("^")) {
+			String[] halves = z.split("\\^");
+			return (Math.pow(getValueOfPart(halves[0], at), getValueOfPart(halves[1], at)));
+		} else if(z.contains("sin")) {
+			String[] halves = z.split("n");
+			return (Math.sin(getValueOfPart(halves[1], at)));
+		} else if(z.contains("cos")) {
+			String[] halves = z.split("s");
+			return (Math.cos(getValueOfPart(halves[1], at)));
+		} else if(z.contains("tan")) {
+			String[] halves = z.split("n");
+			return (Math.sin(getValueOfPart(halves[1], at)));
+		} else if(z.equals("PI")) {
+			return (Math.PI);
+		} else if(z.equals("e")) {
+			return (Math.E);
+		}
+		else {
+			return (Double.parseDouble(z));
 		}
 	}
 	
@@ -129,6 +137,59 @@ public class Functionv2 {
 			total += this.getValueAt(i) * interval;
 		}
 		return total;
+	}
+	
+	public double getNumberOfExtremas(double start, double end, double interval) {
+		int total = 0;
+		Boolean lastDecreased = null;
+		for(double i = start; i < end; i += interval) {
+			//System.out.println(baseFunction);
+			double deriv = derivOfFunc(i, interval);
+			boolean currentDec = deriv <= 0;
+			if(lastDecreased != null && currentDec != lastDecreased) {
+				total++;
+			}
+			lastDecreased = currentDec;
+		}
+		return total;
+	}
+	
+	public double derivOfFunc(double pos, double interval) {
+		return (this.getValueAt(pos + interval) - this.getValueAt(pos)) / interval;
+	}
+	
+	public double biggestDerivOfFunc(double start, double end, double interval) {
+		double biggest = 0;
+		Double first = null;
+		Double second = null;
+		for (double i = start; i < end; i += interval) {
+			if (first == null) {
+				first = getValueAt(i);
+			}
+			second = getValueAt(i + interval);
+			double toCheck = (second - first) / interval;
+			if (toCheck > biggest) {
+				biggest = toCheck;
+			}
+			first = second;
+			second = null;
+		}
+		return biggest;
+	}
+	
+	public void addFunc(String toAdd) {
+		baseFunction += "+";
+		baseFunction += toAdd;
+	}
+
+	public void multiplyFunc(String toMultiply) {
+		baseFunction += "*";
+		baseFunction += toMultiply;
+	}
+
+	public void subtractFunc(String toSubtract) {
+		baseFunction += "-";
+		baseFunction += toSubtract;
 	}
 
 }
