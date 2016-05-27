@@ -18,6 +18,20 @@ public class Function {
 		}
 		return total;
 	}
+	
+	public double getNumberOfExtremas(double start, double end, double interval) {
+		int total = 0;
+		Boolean lastDecreased = null;
+		for(double i = start; i < end; i += interval) {
+			double deriv = derivOfFunc(i, interval);
+			boolean currentDec = deriv <= 0;
+			if(lastDecreased != null && currentDec != lastDecreased) {
+				total++;
+			}
+			lastDecreased = currentDec;
+		}
+		return total;
+	}
 
 	public double biggestDerivOfFunc(double start, double end, double interval) {
 		double biggest = 0;

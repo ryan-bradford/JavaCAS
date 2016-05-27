@@ -1,5 +1,7 @@
 package com.ryanb3.JavaCAS;
 
+import javax.swing.JOptionPane;
+
 public class main {
 
 	String[] functions = { "(1)", "(x)", "abs(x)", "2^(x)", "1/(x)", "cos(x)", "sin(x)", "arctan(x)", "e^(x)",
@@ -14,18 +16,39 @@ public class main {
 	// Opperations within Compositon
 
 	public main() {
+		String entered = JOptionPane.showInputDialog("Enter a function that you want the integral of:");
+		Functionv2 text = new Functionv2(entered);
+		Double start = Double.parseDouble(JOptionPane.showInputDialog("Start x"));
+		Double end = Double.parseDouble(JOptionPane.showInputDialog("End x"));
+		Double interval = Double.parseDouble(JOptionPane.showInputDialog("What is the interval?"));
+		JOptionPane.showMessageDialog(null, "The integral from " + start + " to " + end + " is: " + text.integralOfFunc(start, end, interval));
+		System.exit(1);
 		//Function test = new Function("2^(x)*ln(x)*ln(x)*ln(x)*ln(x)");
 		//System.out.println(test.getValueAt(5));
-		String best = biggestDeriv(1, 5, .1, 48);
-		System.out.println(best);
-		System.out.println(new Function(best).biggestDerivOfFunc(1, 5, .1));
+		//String best = getBestIntegral(1, 5, .1, 50);
+		//System.out.println(best);
+		//System.out.println(new Function(best).integralOfFunc(1, 5, .001));
 	}
-
+	
+	public String mostExtremas(double start, double end, double interval, int moneyToSpend) {
+		double bestIntegral = 0;
+		String function = "";
+		for (int i = 0; i < 100; i++) {
+			Function current = genRandomFunction(moneyToSpend, "cos(x)");
+			double integral = current.getNumberOfExtremas(start, end, interval);
+			if (integral > bestIntegral && !Double.isInfinite(integral)) {
+				bestIntegral = integral;
+				function = current.function;
+			}
+		}
+		return function;
+	}
+	
 	public String biggestDeriv(double start, double end, double interval, int moneyToSpend) {
 		double bestIntegral = 0;
 		String function = "";
-		for (int i = 0; i < 100000; i++) {
-			Function current = genRandomFunction(moneyToSpend);
+		for (int i = 0; i < 10000; i++) {
+			Function current = genRandomFunction(moneyToSpend, "");
 			double integral = current.biggestDerivOfFunc(start, end, interval);
 			if (integral > bestIntegral && !Double.isInfinite(integral)) {
 				bestIntegral = integral;
@@ -38,8 +61,8 @@ public class main {
 	public String getBestIntegral(double start, double end, double interval, int moneyToSpend) {
 		double bestIntegral = 0;
 		String function = "";
-		for (int i = 0; i < 10000; i++) {
-			Function current = genRandomFunction(moneyToSpend);
+		for (int i = 0; i < 1000; i++) {
+			Function current = genRandomFunction(moneyToSpend, "");
 			double integral = current.integralOfFunc(start, end, interval);
 			if (integral > bestIntegral && !Double.isInfinite(integral)) {
 				bestIntegral = integral;
@@ -49,8 +72,8 @@ public class main {
 		return function;
 	}
 
-	public Function genRandomFunction(int totalMoney) {
-		Function toReturn = new Function("");
+	public Function genRandomFunction(int totalMoney, String base) {
+		Function toReturn = new Function(base);
 		while (totalMoney > 0) {
 			int toAdd = getRandomPart(totalMoney);
 			totalMoney -= cost[toAdd];
@@ -85,7 +108,7 @@ public class main {
 
 	public Function addFuncDiff(Function base, String toAdd) {
 		double percentage = Math.random();
-		if (percentage > 1.0 / 2.0) {
+		if (percentage > 0.0 / 2.0) {
 			boolean result;
 			result = base.insertFunc(toAdd);
 			if (result == false) {
