@@ -15,14 +15,24 @@ public class main {
 	//Problems with negatives
 
 	public main() {
+		extremasStart();
+		//functionStart();
+	}
+	
+	public void functionStart() {
 		String entered = JOptionPane.showInputDialog("Enter a function that you want the number of extremas:");
 		Functionv2 text = new Functionv2(entered);
-		//System.out.println(text.getValueAt(0.0001));
+		Double start = Double.parseDouble(JOptionPane.showInputDialog("Where to get the function of?"));
+		JOptionPane.showMessageDialog(null, "The f of " + start + " is: " + text.getValueAt(start));
+	}
+	
+	public void extremasStart() {
+		String entered = JOptionPane.showInputDialog("Enter a function that you want the number of extremas:");
+		Functionv2 text = new Functionv2(entered);
 		Double start = Double.parseDouble(JOptionPane.showInputDialog("Start x"));
 		Double end = Double.parseDouble(JOptionPane.showInputDialog("End x"));
-		Double interval = Double.parseDouble(JOptionPane.showInputDialog("What is the interval?"));
+		Double interval = .0001;
 		JOptionPane.showMessageDialog(null, "The # from " + start + " to " + end + " is: " + text.getNumberOfExtremas(start, end, interval));
-		System.exit(1);
 	}
 	
 	/*
