@@ -2,17 +2,17 @@ package com.ryanb3.JavaCAS;
 
 import javax.swing.JOptionPane;
 
-public class main {
+public class Test {
 
 	String[] functions = { "(1)", "(x)", "abs(x)", "2^(x)", "1/(x)", "cos(x)", "sin(x)", "arctan(x)", "e^(x)",
 			"ln(x)" };
 	int[] cost = { 1, 7, 7, 12, 4, 14, 14, 3, 42, 4 };
 
 	public static void main(String[] args) {
-		new main();
+		new Test();
 	}
 
-	public main() {
+	public Test() {
 		String message = "Press 1 for # of extremas \n press 2 for function value at a point \n press 3 for the integral of a function \n press 4 to find the biggest derivative on an interval \n press 5 to find the derivative at a point.";
 		String entered = JOptionPane.showInputDialog(message);
 		if(entered.equals("1")) {
