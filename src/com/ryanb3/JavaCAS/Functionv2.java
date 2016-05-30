@@ -150,6 +150,18 @@ public class Functionv2 {
 		} else if (z.contains("tan")) {
 			String[] halves = z.split("n");
 			toReturn = (Math.sin(getValueOfPart(halves[1], at)));
+		} else if (z.contains("atan")) {
+			String[] halves = z.split("n");
+			toReturn = (Math.atan(getValueOfPart(halves[1], at)));
+		} else if (z.contains("asin")) {
+			String[] halves = z.split("n");
+			toReturn = (Math.asin(getValueOfPart(halves[1], at)));
+		} else if (z.contains("acos")) {
+			String[] halves = z.split("s");
+			toReturn = (Math.acos(getValueOfPart(halves[1], at)));
+		} else if (z.contains("abs")) {
+			String[] halves = z.split("s");
+			toReturn = (Math.abs(getValueOfPart(halves[1], at)));
 		} else if (z.equals("PI")) {
 			toReturn = (Math.PI);
 		} else if (z.equals("e")) {
@@ -157,6 +169,7 @@ public class Functionv2 {
 		} else {
 			toReturn = (Double.parseDouble(z));
 		}
+		
 		if (negative) {
 			return -toReturn;
 		} else {
