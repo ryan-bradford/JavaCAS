@@ -70,7 +70,7 @@ public class Functionv2 {
 		for(int i = 0; i < function.length(); i++) {
 			if(function.charAt(i) == '+') {
 				split.add(function.substring(last, i));
-				last = i;
+				last = i+1;
 			} else if(function.charAt(i) == '-') {
 				if(i > 0 && !isOpperator(function.charAt(i - 1))) {
 					split.add(function.substring(last, i));
@@ -78,9 +78,7 @@ public class Functionv2 {
 				}
 			}
 		}
-		if(split.size() == 0) {
-			split.add(function);
-		}
+		split.add(function.substring(last, function.length()));
 		return split;
 	}
 
@@ -138,9 +136,20 @@ public class Functionv2 {
 		}
 		if (z.equals("x")) {
 			toReturn = at;
+		} else if (z.contains("Infinity")) {
+			toReturn = 0;
 		} else if (z.contains("^")) {
 			String[] halves = z.split("\\^");
 			toReturn = (Math.pow(getValueOfPart(halves[0], at), getValueOfPart(halves[1], at)));
+		} else if (z.contains("arctan")) {
+			String[] halves = z.split("n");
+			toReturn = (Math.atan(getValueOfPart(halves[1], at)));
+		} else if (z.contains("arcsin")) {
+			String[] halves = z.split("n");
+			toReturn = (Math.asin(getValueOfPart(halves[1], at)));
+		} else if (z.contains("arccos")) {
+			String[] halves = z.split("s");
+			toReturn = (Math.acos(getValueOfPart(halves[1], at)));
 		} else if (z.contains("sin")) {
 			String[] halves = z.split("n");
 			toReturn = (Math.sin(getValueOfPart(halves[1], at)));
@@ -150,15 +159,12 @@ public class Functionv2 {
 		} else if (z.contains("tan")) {
 			String[] halves = z.split("n");
 			toReturn = (Math.sin(getValueOfPart(halves[1], at)));
-		} else if (z.contains("atan")) {
+		} else if (z.contains("ln")) {
 			String[] halves = z.split("n");
-			toReturn = (Math.atan(getValueOfPart(halves[1], at)));
-		} else if (z.contains("asin")) {
+			toReturn = (Math.log(getValueOfPart(halves[1], at)));
+		} else if (z.contains("log")) {
 			String[] halves = z.split("n");
-			toReturn = (Math.asin(getValueOfPart(halves[1], at)));
-		} else if (z.contains("acos")) {
-			String[] halves = z.split("s");
-			toReturn = (Math.acos(getValueOfPart(halves[1], at)));
+			toReturn = (Math.log10(getValueOfPart(halves[1], at)));
 		} else if (z.contains("abs")) {
 			String[] halves = z.split("s");
 			toReturn = (Math.abs(getValueOfPart(halves[1], at)));
@@ -235,6 +241,34 @@ public class Functionv2 {
 	public void subtractFunc(String toSubtract) {
 		baseFunction += "-";
 		baseFunction += toSubtract;
+	}
+	
+	public void insertFunctionAtRandomPoint(String function) {
+		double totalX = 0;
+		for(int i = 0; i < baseFunction.length(); i++) {
+			if(baseFunction.charAt(i) == 'x') {
+				totalX++;
+			}
+		}
+		double probMod = 1 / totalX;
+		boolean toBreak = false;
+		for(int x = 1; x < totalX+1; x++) {
+			for(int i = 0; i < baseFunction.length(); i++) {
+				if(baseFunction.charAt(i) == 'x' && Math.random() <= probMod * x) {
+					String firstHalf = baseFunction.substring(0, i);
+					String secondHalf = baseFunction.substring(i+1, baseFunction.length());
+					baseFunction = "";
+					baseFunction += firstHalf;
+					baseFunction += function;
+					baseFunction += secondHalf;
+					toBreak = true;
+					break;
+				}
+			}
+			if(toBreak) {
+				break;
+			}
+		}
 	}
 
 }
