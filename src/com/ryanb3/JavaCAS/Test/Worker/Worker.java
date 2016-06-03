@@ -1,4 +1,4 @@
-package com.ryanb3.JavaCAS.Test.FunctionGenerator;
+package com.ryanb3.JavaCAS.Test.Worker;
 
 import java.util.ArrayList;
 

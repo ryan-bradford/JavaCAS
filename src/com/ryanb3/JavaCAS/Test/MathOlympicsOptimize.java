@@ -2,9 +2,9 @@ package com.ryanb3.JavaCAS.Test;
 
 import java.util.ArrayList;
 
+
 import com.ryanb3.JavaCAS.Test.FinishThread.Finished;
-import com.ryanb3.JavaCAS.Test.FunctionChecker.CheckThread;
-import com.ryanb3.JavaCAS.Test.FunctionGenerator.Worker;
+import com.ryanb3.JavaCAS.Test.Worker.Worker;
 
 public class MathOlympicsOptimize {
 
