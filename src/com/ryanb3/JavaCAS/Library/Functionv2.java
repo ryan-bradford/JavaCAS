@@ -1,11 +1,12 @@
-package com.ryanb3.JavaCAS;
+package com.ryanb3.JavaCAS.Library;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Functionv2 {
 
-	String baseFunction;
+	public String baseFunction;
+	boolean broken = false;
 
 	public Functionv2(String function) {
 		this.baseFunction = function;
@@ -83,10 +84,14 @@ public class Functionv2 {
 	}
 
 	public double getValueAt(double at) {
+		broken = false;
 		ArrayList<Double> values = new ArrayList<Double>();
 		String newFunction = this.simplifyNoGroups(baseFunction, at);
 		ArrayList<String> firstSplit = this.splitAtAddSub(newFunction);
 		values = doMultiDiv(firstSplit, values, at);
+		if(broken) {
+			return Double.POSITIVE_INFINITY;
+		}
 		return doAddSub(newFunction, values, at);
 	}
 
@@ -137,6 +142,7 @@ public class Functionv2 {
 		if (z.equals("x")) {
 			toReturn = at;
 		} else if (z.contains("Infinity")) {
+			broken = true;
 			toReturn = 0;
 		} else if (z.contains("^")) {
 			String[] halves = z.split("\\^");
@@ -196,7 +202,10 @@ public class Functionv2 {
 		Boolean lastDecreased = null;
 		for (double i = start; i < end; i += interval) {
 			double deriv = derivOfFunc(i, interval);
-			boolean currentDec = deriv <= 0;
+			if(deriv < .00001 && deriv > -.00001) {
+				deriv = 0;
+			}
+			boolean currentDec = deriv < 0;
 			if (lastDecreased != null && currentDec != lastDecreased) {
 				total++;
 			}
@@ -228,19 +237,46 @@ public class Functionv2 {
 		return biggest;
 	}
 
-	public void addFunc(String toAdd) {
-		baseFunction += "+";
-		baseFunction += toAdd;
+	public void addFuncAtLevel(String toAdd, int level) {
+		ArrayList<Integer> breakdown = getLevelBreakdown(level);
+		double number = breakdown.size();
+		double random = Math.random();
+		for(int i = 0; i < number; i++) {
+			if(random < (i + 1) / number) {
+				String firstHalf = baseFunction.substring(0, breakdown.get(i));
+				String secondHalf = baseFunction.substring(breakdown.get(i), baseFunction.length());
+				baseFunction = firstHalf + "+" + toAdd + secondHalf;
+				break;
+			}
+		}
 	}
 
-	public void multiplyFunc(String toMultiply) {
-		baseFunction += "*";
-		baseFunction += toMultiply;
+	public void multiplyFuncAtLevel(String toMultiply, int level) {
+		ArrayList<Integer> breakdown = getLevelBreakdown(level);
+		double number = breakdown.size();
+		double random = Math.random();
+		for(int i = 0; i < number; i++) {
+			if(random < (i + 1) / number) {
+				String firstHalf = baseFunction.substring(0, breakdown.get(i));
+				String secondHalf = baseFunction.substring(breakdown.get(i), baseFunction.length());
+				baseFunction = firstHalf + "*" + toMultiply + secondHalf;
+				break;
+			}
+		}
 	}
 
-	public void subtractFunc(String toSubtract) {
-		baseFunction += "-";
-		baseFunction += toSubtract;
+	public void subtractFuncAtLevel(String toSubtract, int level) {
+		ArrayList<Integer> breakdown = getLevelBreakdown(level);
+		double number = breakdown.size();
+		double random = Math.random();
+		for(int i = 0; i < number; i++) {
+			if(random < (i + 1) / number) {
+				String firstHalf = baseFunction.substring(0, breakdown.get(i));
+				String secondHalf = baseFunction.substring(breakdown.get(i), baseFunction.length());
+				baseFunction = firstHalf + "-" + toSubtract + secondHalf;
+				break;
+			}
+		}
 	}
 	
 	public void insertFunctionAtRandomPoint(String function) {
@@ -269,6 +305,43 @@ public class Functionv2 {
 				break;
 			}
 		}
+	}
+	
+	public int getLevels() {
+		int biggestDepth = 1;
+		int currentDepth = 1;
+		for(char x: baseFunction.toCharArray()) {
+			if(x == '(') {
+				biggestDepth++;
+			} else if(x == ')') {
+				if(currentDepth > biggestDepth) {
+					biggestDepth = currentDepth;
+				}
+				currentDepth = 1;
+			}
+		}
+		return biggestDepth;
+	}
+	
+	public ArrayList<Integer> getLevelBreakdown(int level) {
+		ArrayList<Integer> toReturn = new ArrayList<Integer>();
+		if(level == 1) {
+			toReturn.add(baseFunction.length());
+			return toReturn;
+		}
+		int currentDepth = 1;
+		for(int i = 0; i < baseFunction.length(); i++) {
+			char x = baseFunction.charAt(i);
+			if(x == '(') {
+				currentDepth++;
+			} else if(x == ')') {
+				if(currentDepth == level) {
+					toReturn.add(i);
+				}
+				currentDepth--;
+			}
+		}
+		return toReturn;
 	}
 
 }
