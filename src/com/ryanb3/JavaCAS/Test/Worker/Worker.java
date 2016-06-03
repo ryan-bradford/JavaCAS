@@ -12,7 +12,7 @@ public class Worker extends Thread {
 	ArrayList<Functionv2> storage;
 	String[] functions = { "1", "x", "abs(x)", "(x)^2", "1/(x)", "cos(x)", "sin(x)", "arctan(x)", "e^(x)", "ln(x)" };
 	int[] costs = { 1, 7, 7, 12, 4, 14, 14, 3, 42, 4 };
-	int cost = 0;
+	int cost;
 	int goal;
 	double start;
 	double end;

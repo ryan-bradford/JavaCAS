@@ -8,8 +8,7 @@ public class Test {
 	
 	//Make it multitask
 	
-	double interval = .001;
-	int runs = 100;
+	double interval = .01;
 
 	public static void main(String[] args) {
 		new Test();
@@ -25,6 +24,7 @@ public class Test {
 			MathOlympicsOptimize test = new MathOlympicsOptimize(money, start, end, .001, count);
 			JOptionPane.showMessageDialog(null, "Working");
 		} else {
+			interval = .001;
 			manipulateFunctions();
 		}
 	}
