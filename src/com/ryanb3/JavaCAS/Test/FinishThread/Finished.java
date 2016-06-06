@@ -9,19 +9,19 @@ import com.ryanb3.JavaCAS.Library.Functionv2;
 public class Finished extends Thread {
 
 	ArrayList<String> answers;
-	int goal;
 	double start;
 	double end;
 	double interval;
 	int length;
+	ArrayList<Integer> count;
 	
-	public Finished(ArrayList<String> answers, int goal, double start, double end, double interval, int length) {
+	public Finished(ArrayList<String> answers, double start, double end, double interval, int length, ArrayList<Integer> count) {
 		this.answers = answers;
-		this.goal = goal;
 		this.start = start;
 		this.end = end;
 		this.interval = interval;
 		this.length = length;
+		this.count = count;
 	}
 	
 	public void run() {
@@ -40,7 +40,11 @@ public class Finished extends Thread {
 				biggestFunc = answers.get(i);
 			}
 		}
+		double total = 0;
+		for(Integer x: count) {
+			total += x;
+		}
 		JOptionPane.showMessageDialog(null, "The biggest integral is: " + new Functionv2(biggestFunc).integralOfFunc(start, end, interval) + 
-				" of: " + biggestFunc);
+				" of: " + biggestFunc + ". Checked " + total + " functions");
 	}
 }

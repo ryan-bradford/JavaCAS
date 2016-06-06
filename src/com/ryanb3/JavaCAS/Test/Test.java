@@ -20,7 +20,7 @@ public class Test {
 			double start = Double.parseDouble(JOptionPane.showInputDialog("What is the start x?"));
 			double end = Double.parseDouble(JOptionPane.showInputDialog("What is the end x?"));
 			int money = Integer.parseInt(JOptionPane.showInputDialog("How much money do you want to spend?"));
-			int count = Integer.parseInt(JOptionPane.showInputDialog("How many functions do you want to test?"));
+			Double count = Double.parseDouble(JOptionPane.showInputDialog("How long do you want to run for?"));
 			MathOlympicsOptimize test = new MathOlympicsOptimize(money, start, end, .001, count);
 			JOptionPane.showMessageDialog(null, "Working");
 		} else {

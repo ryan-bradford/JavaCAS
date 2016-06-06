@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import com.ryanb3.JavaCAS.Library.Functionv2;
-import com.ryanb3.JavaCAS.Test.MathOlympicsOptimize;
 
 public class Worker extends Thread {
 
@@ -13,27 +12,47 @@ public class Worker extends Thread {
 	String[] functions = { "1", "x", "abs(x)", "(x)^2", "1/(x)", "cos(x)", "sin(x)", "arctan(x)", "e^(x)", "ln(x)" };
 	int[] costs = { 1, 7, 7, 12, 4, 14, 14, 3, 42, 4 };
 	int cost;
-	int goal;
 	double start;
 	double end;
 	double interval;
 	int id;
 	ArrayList<String> answers;
+	double minCount;
+	double startTime = System.currentTimeMillis();
+	ArrayList<Integer> count;
 
-	public Worker(int cost, int goal, int id, double start, double end, double interval,
-			ArrayList<String> answers) {
+	public Worker(int cost, int id, double start, double end, double interval, ArrayList<String> answers,
+			double minCount, ArrayList<Integer> count) {
 		this.storage = new ArrayList<Functionv2>();
 		this.cost = cost;
-		this.goal = goal;
 		this.start = start;
 		this.end = end;
 		this.id = id;
 		this.interval = interval;
 		this.answers = answers;
+		this.minCount = minCount;
+		this.count = count;
 	}
 
 	public void run() {
-		while (storage.size() < goal) {
+		double biggest = 0;
+		String biggestFunc = "";
+		while ((System.currentTimeMillis() - startTime) / 60000 < minCount) {
+			addRandFunc();
+			Functionv2 x = storage.get(storage.size() - 1);
+			double integral = x.integralOfFunc(start, end, interval);
+			if (integral > biggest&& !undef(x)) {
+				biggestFunc = x.baseFunction;
+				biggest = integral;
+			}
+		}
+		answers.add(biggestFunc);
+		count.add(storage.size());
+	}
+
+	public void addRandFunc() {
+		boolean added = false;
+		while (!added && (System.currentTimeMillis() - startTime) / 60000 < minCount) {
 			ArrayList<Integer> next = new ArrayList<Integer>();
 			for (int x = 0; x < 10 * Math.random(); x++) {
 				next.add((int) ((Math.random() * functions.length)));
@@ -43,15 +62,13 @@ public class Worker extends Thread {
 				for (int x : next) {
 					toProcess.add(functions[x]);
 				}
-				for (int i = 0; i < 5; i++) {
-					Functionv2 toAdd = randomFunction(toProcess);
-					if (!storage.contains(toAdd)) {
-						storage.add(toAdd);
-					}
+				Functionv2 toAdd = randomFunction(toProcess);
+				if (!storage.contains(toAdd)) {
+					storage.add(toAdd);
+					added = true;
 				}
 			}
 		}
-		answers.add(getBiggestInt(storage, start, end, interval).baseFunction);
 	}
 
 	public Functionv2 getMostExtremas(ArrayList<Functionv2> toUse, double start, double end, double interval) {
@@ -60,8 +77,8 @@ public class Worker extends Thread {
 		Functionv2 biggestFunc = null;
 		for (Functionv2 x : toUse) {
 			count++;
-			double percent = (int)(10000 * 1 / (count / toUse.size())) / 10000;
-			if(percent % 20 == 0) {
+			double percent = (int) (10000 * 1 / (count / toUse.size())) / 10000;
+			if (percent % 20 == 0) {
 				JOptionPane.showMessageDialog(null, "%" + percent + " Done");
 			}
 			double current = x.getNumberOfExtremas(start, end, interval);
@@ -72,7 +89,7 @@ public class Worker extends Thread {
 		}
 		return biggestFunc;
 	}
-	
+
 	public Functionv2 getBiggestInt(ArrayList<Functionv2> toUse, double start, double end, double interval) {
 		double biggestVal = 0;
 		Functionv2 biggestFunc = null;
@@ -85,10 +102,10 @@ public class Worker extends Thread {
 		}
 		return biggestFunc;
 	}
-	
+
 	public boolean undef(Functionv2 toCheck) {
-		if(toCheck.getValueAt(Math.PI) == Double.POSITIVE_INFINITY || toCheck.getValueAt(1) == Double.POSITIVE_INFINITY || 
-		toCheck.getValueAt(Math.PI / 2) == Double.POSITIVE_INFINITY) {
+		if (toCheck.getValueAt(Math.PI) == Double.POSITIVE_INFINITY || toCheck.getValueAt(1) == Double.POSITIVE_INFINITY
+				|| toCheck.getValueAt(Math.PI / 2) == Double.POSITIVE_INFINITY) {
 			return true;
 		}
 		return false;
@@ -104,7 +121,7 @@ public class Worker extends Thread {
 			if (random < .25) {
 				toReturn.insertFunctionAtRandomPoint(x);
 			} else {
-				int levelToInsertAt = (int)(toReturn.getLevels() * Math.random());
+				int levelToInsertAt = (int) (toReturn.getLevels() * Math.random());
 				if (random < .5) {
 					toReturn.addFuncAtLevel(x, levelToInsertAt);
 				} else if (random < .75) {
