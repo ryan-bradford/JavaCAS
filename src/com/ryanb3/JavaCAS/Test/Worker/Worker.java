@@ -60,24 +60,53 @@ public class Worker extends Thread {
 	public void changeWeight(String func) {
 		if(func.contains("abs")) {
 			weight[2]++;
-		} else if(func.contains("^2")) {
+		} else {
+			weight[2]--;
+		}
+		if(func.contains("^2")) {
 			weight[3]++;
-		} else if(func.contains("\\/")) {
+		} else {
+			weight[3]--;
+		}	
+		if(func.contains("\\/")) {
 			weight[4]++;
-		} else if(func.contains("cos")) {
+		} else {
+			weight[4]--;
+		}
+		if(func.contains("cos")) {
 			weight[5]++;
-		} else if(func.contains("sin")) {
+		} else {
+			weight[5]--;
+		}
+		if(func.contains("sin")) {
 			weight[6]++;
-		} else if(func.contains("arctan")) {
+		} else {
+			weight[6]--;
+		}
+		if(func.contains("arctan")) {
 			weight[7]++;
-		} else if(func.contains("e^")) {
+		} else {
+			weight[7]--;
+		}
+		if(func.contains("e^")) {
 			weight[8]++;
-		} else if(func.contains("ln")) {
+		} else {
+			weight[8]--;
+		}
+		if(func.contains("ln")) {
 			weight[9]++;
-		} else if(func.contains("+1") || func.contains("/1") || func.contains("-1")|| func.contains("*1")) {
+		} else {
+			weight[9]--;
+		}
+		if(func.contains("+1") || func.contains("/1") || func.contains("-1")|| func.contains("*1")) {
 			weight[0]++;
-		} else if(func.contains("+x") || func.contains("*x")||func.contains("/x")||func.contains("-1")) {
+		} else {
+			weight[0]--;
+		}	
+		if(func.contains("+x") || func.contains("*x")||func.contains("/x")||func.contains("-1")) {
 			weight[1]++;
+		} else {
+			weight[1]--;
 		}
 	}
 	
