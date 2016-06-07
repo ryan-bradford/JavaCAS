@@ -11,6 +11,7 @@ public class Worker extends Thread {
 	ArrayList<Functionv2> storage;
 	String[] functions = { "1", "x", "abs(x)", "(x)^2", "1/(x)", "cos(x)", "sin(x)", "arctan(x)", "e^(x)", "ln(x)" };
 	int[] costs = { 1, 7, 7, 12, 4, 14, 14, 3, 42, 4 };
+	double[] weight = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 	int cost;
 	double start;
 	double end;
@@ -20,6 +21,7 @@ public class Worker extends Thread {
 	double minCount;
 	double startTime = System.currentTimeMillis();
 	ArrayList<Integer> count;
+	int timesChosen = 0;
 
 	public Worker(int cost, int id, double start, double end, double interval, ArrayList<String> answers,
 			double minCount, ArrayList<Integer> count) {
@@ -43,6 +45,11 @@ public class Worker extends Thread {
 			double integral = x.integralOfFunc(start, end, interval);
 			if (integral > biggest&& !undef(x)) {
 				biggestFunc = x.baseFunction;
+				timesChosen++;
+				if(timesChosen > 5) {
+					changeWeight(biggestFunc);
+					timesChosen = 0;
+				}
 				biggest = integral;
 			}
 		}
@@ -50,12 +57,36 @@ public class Worker extends Thread {
 		count.add(storage.size());
 	}
 
+	public void changeWeight(String func) {
+		if(func.contains("abs")) {
+			weight[2]++;
+		} else if(func.contains("^2")) {
+			weight[3]++;
+		} else if(func.contains("\\/")) {
+			weight[4]++;
+		} else if(func.contains("cos")) {
+			weight[5]++;
+		} else if(func.contains("sin")) {
+			weight[6]++;
+		} else if(func.contains("arctan")) {
+			weight[7]++;
+		} else if(func.contains("e^")) {
+			weight[8]++;
+		} else if(func.contains("ln")) {
+			weight[9]++;
+		} else if(func.contains("+1") || func.contains("/1") || func.contains("-1")|| func.contains("*1")) {
+			weight[0]++;
+		} else if(func.contains("+x") || func.contains("*x")||func.contains("/x")||func.contains("-1")) {
+			weight[1]++;
+		}
+	}
+	
 	public void addRandFunc() {
 		boolean added = false;
 		while (!added && (System.currentTimeMillis() - startTime) / 60000 < minCount) {
 			ArrayList<Integer> next = new ArrayList<Integer>();
 			for (int x = 0; x < 10 * Math.random(); x++) {
-				next.add((int) ((Math.random() * functions.length)));
+				next.add(getRandomNum());
 			}
 			if (this.checkPrice(cost, next)) {
 				ArrayList<String> toProcess = new ArrayList<String>();
@@ -71,6 +102,25 @@ public class Worker extends Thread {
 		}
 	}
 
+	public int getRandomNum() {
+		boolean chosen = false;
+		int toReturn = 0;
+		double total = 0;
+		for(int x = 0; x < weight.length; x++) {
+			total += weight[x];
+		}
+		while(!chosen) {
+			for(int x = 0; x < weight.length; x++) {
+				if(weight[x] / total > Math.random()) {
+					chosen = true;
+					toReturn = x;
+					break;
+				}
+			}
+		}
+		return toReturn;
+	}
+	
 	public Functionv2 getMostExtremas(ArrayList<Functionv2> toUse, double start, double end, double interval) {
 		double biggestVal = 0;
 		int count = 0;
