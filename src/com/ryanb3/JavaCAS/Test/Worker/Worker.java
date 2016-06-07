@@ -43,10 +43,10 @@ public class Worker extends Thread {
 			addRandFunc();
 			Functionv2 x = storage.get(storage.size() - 1);
 			double integral = x.integralOfFunc(start, end, interval);
-			if (integral > biggest&& !undef(x)) {
+			if (integral > biggest && !undef(x)) {
 				biggestFunc = x.baseFunction;
 				timesChosen++;
-				if(timesChosen > 5) {
+				if (timesChosen > 5) {
 					changeWeight(biggestFunc);
 					timesChosen = 0;
 				}
@@ -58,58 +58,78 @@ public class Worker extends Thread {
 	}
 
 	public void changeWeight(String func) {
-		if(func.contains("abs")) {
+		if (func.contains("abs")) {
 			weight[2]++;
 		} else {
-			weight[2]--;
+			if (weight[2] > 1) {
+				weight[2]--;
+			}
 		}
-		if(func.contains("^2")) {
+		if (func.contains("^2")) {
 			weight[3]++;
 		} else {
-			weight[3]--;
-		}	
-		if(func.contains("\\/")) {
+			if (weight[3] > 1) {
+				weight[3]--;
+			}
+		}
+		if (func.contains("\\/")) {
 			weight[4]++;
 		} else {
-			weight[4]--;
+			if (weight[4] > 1) {
+				weight[4]--;
+			}
 		}
-		if(func.contains("cos")) {
+		if (func.contains("cos")) {
 			weight[5]++;
 		} else {
-			weight[5]--;
+			if (weight[5] > 1) {
+				weight[5]--;
+			}
 		}
-		if(func.contains("sin")) {
+		if (func.contains("sin")) {
 			weight[6]++;
 		} else {
-			weight[6]--;
+			if (weight[6] > 1) {
+				weight[6]--;
+			}
 		}
-		if(func.contains("arctan")) {
+		if (func.contains("arctan")) {
 			weight[7]++;
 		} else {
-			weight[7]--;
+			if (weight[7] > 1) {
+				weight[7]--;
+			}
 		}
-		if(func.contains("e^")) {
+		if (func.contains("e^")) {
 			weight[8]++;
 		} else {
-			weight[8]--;
+			if (weight[8] > 1) {
+				weight[8]--;
+			}
 		}
-		if(func.contains("ln")) {
+		if (func.contains("ln")) {
 			weight[9]++;
 		} else {
-			weight[9]--;
+			if (weight[9] > 1) {
+				weight[9]--;
+			}
 		}
-		if(func.contains("+1") || func.contains("/1") || func.contains("-1")|| func.contains("*1")) {
+		if (func.contains("+1") || func.contains("/1") || func.contains("-1") || func.contains("*1")) {
 			weight[0]++;
 		} else {
-			weight[0]--;
-		}	
-		if(func.contains("+x") || func.contains("*x")||func.contains("/x")||func.contains("-1")) {
+			if (weight[0] > 1) {
+				weight[0]--;
+			}
+		}
+		if (func.contains("+x") || func.contains("*x") || func.contains("/x") || func.contains("-1")) {
 			weight[1]++;
 		} else {
-			weight[1]--;
+			if (weight[1] > 1) {
+				weight[1]--;
+			}
 		}
 	}
-	
+
 	public void addRandFunc() {
 		boolean added = false;
 		while (!added && (System.currentTimeMillis() - startTime) / 60000 < minCount) {
@@ -135,12 +155,12 @@ public class Worker extends Thread {
 		boolean chosen = false;
 		int toReturn = 0;
 		double total = 0;
-		for(int x = 0; x < weight.length; x++) {
+		for (int x = 0; x < weight.length; x++) {
 			total += weight[x];
 		}
-		while(!chosen) {
-			for(int x = 0; x < weight.length; x++) {
-				if(weight[x] / total > Math.random()) {
+		while (!chosen) {
+			for (int x = 0; x < weight.length; x++) {
+				if (weight[x] / total > Math.random()) {
 					chosen = true;
 					toReturn = x;
 					break;
@@ -149,7 +169,7 @@ public class Worker extends Thread {
 		}
 		return toReturn;
 	}
-	
+
 	public Functionv2 getMostExtremas(ArrayList<Functionv2> toUse, double start, double end, double interval) {
 		double biggestVal = 0;
 		int count = 0;
@@ -184,11 +204,11 @@ public class Worker extends Thread {
 
 	public boolean undef(Functionv2 toCheck) {
 		if (toCheck.getValueAt(Math.PI) == Double.POSITIVE_INFINITY || toCheck.getValueAt(1) == Double.POSITIVE_INFINITY
-				|| toCheck.getValueAt(Math.PI / 2) == Double.POSITIVE_INFINITY 
+				|| toCheck.getValueAt(Math.PI / 2) == Double.POSITIVE_INFINITY
 				|| toCheck.getValueAt(Math.tan(1)) == Double.POSITIVE_INFINITY
 				|| toCheck.getValueAt(Math.PI / 2) == Double.POSITIVE_INFINITY
 				|| toCheck.getValueAt(0) == Double.POSITIVE_INFINITY) {
-			
+
 			return true;
 		}
 		return false;
