@@ -105,7 +105,11 @@ public class Worker extends Thread {
 
 	public boolean undef(Functionv2 toCheck) {
 		if (toCheck.getValueAt(Math.PI) == Double.POSITIVE_INFINITY || toCheck.getValueAt(1) == Double.POSITIVE_INFINITY
-				|| toCheck.getValueAt(Math.PI / 2) == Double.POSITIVE_INFINITY) {
+				|| toCheck.getValueAt(Math.PI / 2) == Double.POSITIVE_INFINITY 
+				|| toCheck.getValueAt(Math.tan(1)) == Double.POSITIVE_INFINITY
+				|| toCheck.getValueAt(Math.PI / 2) == Double.POSITIVE_INFINITY
+				|| toCheck.getValueAt(0) == Double.POSITIVE_INFINITY) {
+			
 			return true;
 		}
 		return false;
