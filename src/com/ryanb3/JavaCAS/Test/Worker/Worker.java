@@ -9,8 +9,8 @@ import com.ryanb3.JavaCAS.Library.Functionv2;
 public class Worker extends Thread {
 
 	ArrayList<Functionv2> storage;
-	String[] functions = { "1", "x", "abs(x)", "(x)^2", "1/(x)", "cos(x)", "sin(x)", "arctan(x)", "e^(x)", "ln(x)" };
-	int[] costs = { 1, 7, 7, 12, 4, 14, 14, 3, 42, 4 };
+	String[] functions = { "1", "x", "abs(x)", "(x)^2", "1/(x)", "cos(x)", "sin(x)", "arctan(x)", "e^(x)", "ln(x)", "c" };
+	int[] costs = { 1, 7, 7, 12, 4, 14, 14, 3, 42, 4, 1 };
 	double[] weight = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 	int cost;
 	double start;
@@ -46,7 +46,7 @@ public class Worker extends Thread {
 			if (integral > biggest && !undef(x)) {
 				biggestFunc = x.baseFunction;
 				timesChosen++;
-				if (timesChosen > 5) {
+				if (timesChosen > 20) {
 					changeWeight(biggestFunc);
 					timesChosen = 0;
 				}
@@ -57,78 +57,6 @@ public class Worker extends Thread {
 		count.add(storage.size());
 	}
 
-	public void changeWeight(String func) {
-		if (func.contains("abs")) {
-			weight[2]++;
-		} else {
-			if (weight[2] > 1) {
-				weight[2]--;
-			}
-		}
-		if (func.contains("^2")) {
-			weight[3]++;
-		} else {
-			if (weight[3] > 1) {
-				weight[3]--;
-			}
-		}
-		if (func.contains("\\/")) {
-			weight[4]++;
-		} else {
-			if (weight[4] > 1) {
-				weight[4]--;
-			}
-		}
-		if (func.contains("cos")) {
-			weight[5]++;
-		} else {
-			if (weight[5] > 1) {
-				weight[5]--;
-			}
-		}
-		if (func.contains("sin")) {
-			weight[6]++;
-		} else {
-			if (weight[6] > 1) {
-				weight[6]--;
-			}
-		}
-		if (func.contains("arctan")) {
-			weight[7]++;
-		} else {
-			if (weight[7] > 1) {
-				weight[7]--;
-			}
-		}
-		if (func.contains("e^")) {
-			weight[8]++;
-		} else {
-			if (weight[8] > 1) {
-				weight[8]--;
-			}
-		}
-		if (func.contains("ln")) {
-			weight[9]++;
-		} else {
-			if (weight[9] > 1) {
-				weight[9]--;
-			}
-		}
-		if (func.contains("+1") || func.contains("/1") || func.contains("-1") || func.contains("*1")) {
-			weight[0]++;
-		} else {
-			if (weight[0] > 1) {
-				weight[0]--;
-			}
-		}
-		if (func.contains("+x") || func.contains("*x") || func.contains("/x") || func.contains("-1")) {
-			weight[1]++;
-		} else {
-			if (weight[1] > 1) {
-				weight[1]--;
-			}
-		}
-	}
 
 	public void addRandFunc() {
 		boolean added = false;
@@ -137,10 +65,16 @@ public class Worker extends Thread {
 			for (int x = 0; x < 10 * Math.random(); x++) {
 				next.add(getRandomNum());
 			}
-			if (this.checkPrice(cost, next)) {
+			double price = this.checkPrice(next);
+			if (price <= cost) {
 				ArrayList<String> toProcess = new ArrayList<String>();
 				for (int x : next) {
 					toProcess.add(functions[x]);
+				}
+				if(price < cost) {
+					if(Math.random() > .5) {
+						toProcess.add(optimizeConstants(cost - price));
+					}
 				}
 				Functionv2 toAdd = randomFunction(toProcess);
 				if (!storage.contains(toAdd)) {
@@ -148,6 +82,24 @@ public class Worker extends Thread {
 					added = true;
 				}
 			}
+		}
+	}
+	
+	public String optimizeConstants(double money) {
+		double total = 0;
+		double evenSquare = Math.floor(Math.sqrt(money));
+		double subtract = money - (evenSquare * evenSquare);
+		if(subtract == 0) {
+			total = Math.pow(evenSquare, evenSquare);
+			return Double.toString(total);
+		} else if(subtract == 1) {
+			total = Math.pow(evenSquare, evenSquare - 1);
+			total *= (evenSquare + 1);
+			return Double.toString(total);
+		} else {
+			total = Math.pow(evenSquare, evenSquare);
+			total *= subtract;
+			return Double.toString(total);
 		}
 	}
 
@@ -203,10 +155,10 @@ public class Worker extends Thread {
 	}
 
 	public boolean undef(Functionv2 toCheck) {
-		if (toCheck.getValueAt(Math.PI) == Double.POSITIVE_INFINITY || toCheck.getValueAt(1) == Double.POSITIVE_INFINITY
+		if (toCheck.getValueAt(Math.PI) == Double.POSITIVE_INFINITY 
+				|| toCheck.getValueAt(1) == Double.POSITIVE_INFINITY
 				|| toCheck.getValueAt(Math.PI / 2) == Double.POSITIVE_INFINITY
 				|| toCheck.getValueAt(Math.tan(1)) == Double.POSITIVE_INFINITY
-				|| toCheck.getValueAt(Math.PI / 2) == Double.POSITIVE_INFINITY
 				|| toCheck.getValueAt(0) == Double.POSITIVE_INFINITY) {
 
 			return true;
@@ -237,15 +189,103 @@ public class Worker extends Thread {
 		return toReturn;
 	}
 
-	public boolean checkPrice(int toCheckTo, ArrayList<Integer> toCheck) {
+	public double checkPrice(ArrayList<Integer> toCheck) {
 		int totalCost = 0;
 		for (Integer x : toCheck) {
 			totalCost += costs[x];
 		}
-		if (totalCost > toCheckTo) {
-			return false;
-		}
-		return true;
+		return totalCost;
 	}
-
+	
+	public void changeWeight(String func) {
+		if (func.contains("abs")) {
+			if (weight[2] < 5) {
+				weight[2]++;
+			}
+		} else {
+			if (weight[2] > 1) {
+				weight[2]--;
+			}
+		}
+		if (func.contains("^2")) {
+			if (weight[3] < 5) {
+				weight[3]++;
+			} 
+		} else {
+			if (weight[3] > 1) {
+				weight[3]--;
+			}
+		}
+		if (func.contains("\\/")) {
+			if (weight[4] < 5) {
+				weight[4]++;
+			}		} else {
+			if (weight[4] > 1) {
+				weight[4]--;
+			}
+		}
+		if (func.contains("cos")) {
+			if (weight[5] < 5) {
+				weight[5]++;
+			}
+		} else {
+			if (weight[5] > 1) {
+				weight[5]--;
+			}
+		}
+		if (func.contains("sin")) {
+			if (weight[6] < 5) {
+				weight[6]++;
+			}
+		} else {
+			if (weight[6] > 1) {
+				weight[6]--;
+			}
+		}
+		if (func.contains("arctan")) {
+			if (weight[7] < 5) {
+				weight[7]++;
+			}
+		} else {
+			if (weight[7] > 1) {
+				weight[7]--;
+			}
+		}
+		if (func.contains("e^")) {
+			if (weight[8] < 5) {
+				weight[8]++;
+			}
+		} else {
+			if (weight[8] > 1) {
+				weight[8]--;
+			}
+		}
+		if (func.contains("ln")) {
+			if (weight[9] < 5) {
+				weight[9]++;
+			}
+		} else {
+			if (weight[9] > 1) {
+				weight[9]--;
+			}
+		}
+		if (func.contains("+1") || func.contains("/1") || func.contains("-1") || func.contains("*1")) {
+			if (weight[0] < 5) {
+				weight[0]++;
+			}
+		} else {
+			if (weight[0] > 1) {
+				weight[0]--;
+			}
+		}
+		if (func.contains("+x") || func.contains("*x") || func.contains("/x") || func.contains("-1")) {
+			if (weight[1] < 5) {
+				weight[1]++;
+			}
+		} else {
+			if (weight[1] > 1) {
+				weight[1]--;
+			}
+		}
+	}
 }

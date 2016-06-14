@@ -3,6 +3,7 @@ package com.ryanb3.JavaCAS.Test;
 import javax.swing.JOptionPane;
 
 import com.ryanb3.JavaCAS.Library.Functionv2;
+import com.ryanb3.JavaCAS.Test.Worker.Worker;
 
 public class Test {
 	
@@ -15,6 +16,11 @@ public class Test {
 	}
 
 	public Test() {
+		//Worker x = new Worker(0, 0, interval, interval, interval, null, interval, null);
+		standardStart();
+	}
+	
+	public void standardStart() {
 		String message = JOptionPane.showInputDialog("Press 1 for the Math Olympics Integral Optimization \n Press 2 for general function manipulation.");
 		if(message.equals("1")) {
 			double start = Double.parseDouble(JOptionPane.showInputDialog("What is the start x?"));
