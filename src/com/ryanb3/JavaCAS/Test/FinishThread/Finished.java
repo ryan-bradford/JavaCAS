@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import com.ryanb3.JavaCAS.Library.Functionv2;
+import com.ryanb3.JavaCAS.Library.Function;
 
 public class Finished extends Thread {
 
@@ -36,7 +36,7 @@ public class Finished extends Thread {
 		String biggestFunc = "1";
 		double biggestVal = -1;
 		for(int i = 0; i < answers.size(); i++) {
-			if(new Functionv2(answers.get(i)).integralOfFunc(start, end, interval) > biggestVal) {
+			if(new Function(answers.get(i)).integralOfFunc(start, end, interval) > biggestVal) {
 				biggestFunc = answers.get(i);
 			}
 		}
@@ -44,7 +44,7 @@ public class Finished extends Thread {
 		for(Integer x: count) {
 			total += x;
 		}
-		JOptionPane.showMessageDialog(null, "The biggest integral is: " + new Functionv2(biggestFunc).integralOfFunc(start, end, interval) + 
+		JOptionPane.showMessageDialog(null, "The biggest integral is: " + new Function(biggestFunc).integralOfFunc(start, end, interval) + 
 				" of: " + biggestFunc + ". Checked " + total + " functions");
 	}
 }

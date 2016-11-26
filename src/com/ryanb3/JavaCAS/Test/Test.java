@@ -2,13 +2,11 @@ package com.ryanb3.JavaCAS.Test;
 
 import javax.swing.JOptionPane;
 
-import com.ryanb3.JavaCAS.Library.Functionv2;
-import com.ryanb3.JavaCAS.Test.Worker.Worker;
+
+import com.ryanb3.JavaCAS.Library.Function;
 
 public class Test {
-	
-	//Make it multitask
-	
+		
 	double interval = .01;
 
 	public static void main(String[] args) {
@@ -54,14 +52,14 @@ public class Test {
 	public void derivativeStart() {
 		JOptionPane.showMessageDialog(null, "Use * for multiplication \n ^ for exponents");
 		String entered = JOptionPane.showInputDialog("Enter a function that you want the derivative of:");
-		Functionv2 text = new Functionv2(entered);
+		Function text = new Function(entered);
 		Double start = Double.parseDouble(JOptionPane.showInputDialog("Where to get the derivative at?"));
 		JOptionPane.showMessageDialog(null, "The derivative of f at " + start + " is: " + text.derivOfFunc(start, interval));
 	}
 	
 	public void biggestDerivativeStart() {
 		String entered = JOptionPane.showInputDialog("Enter a function that you want the biggest derivative of:");
-		Functionv2 text = new Functionv2(entered);
+		Function text = new Function(entered);
 		Double start = Double.parseDouble(JOptionPane.showInputDialog("What is the start point?"));
 		Double end = Double.parseDouble(JOptionPane.showInputDialog("What is the end point?"));
 		JOptionPane.showMessageDialog(null, "The biggest derivative between " + start + " and " + end + " is: " + text.biggestDerivOfFunc(start, end, interval));
@@ -69,7 +67,7 @@ public class Test {
 	
 	public void integralStart() {
 		String entered = JOptionPane.showInputDialog("Enter a function that you want the integral of:");
-		Functionv2 text = new Functionv2(entered);
+		Function text = new Function(entered);
 		Double start = Double.parseDouble(JOptionPane.showInputDialog("Where to get the integral from?"));
 		Double end = Double.parseDouble(JOptionPane.showInputDialog("Where to get the integral to?"));
 		JOptionPane.showMessageDialog(null, "The integral of f from " + start + " to  " + end + " is: " + text.integralOfFunc(start, end, interval));
@@ -77,14 +75,14 @@ public class Test {
 	
 	public void functionStart() {
 		String entered = JOptionPane.showInputDialog("Enter a function that you want the function of:");
-		Functionv2 text = new Functionv2(entered);
+		Function text = new Function(entered);
 		Double start = Double.parseDouble(JOptionPane.showInputDialog("Where to get the function at?"));
 		JOptionPane.showMessageDialog(null, "The f of " + start + " is: " + text.getValueAt(start));
 	}
 	
 	public void extremasStart() {
 		String entered = JOptionPane.showInputDialog("Enter a function that you want the number of extremas:");
-		Functionv2 text = new Functionv2(entered);
+		Function text = new Function(entered);
 		Double start = Double.parseDouble(JOptionPane.showInputDialog("Start x"));
 		Double end = Double.parseDouble(JOptionPane.showInputDialog("End x"));
 		Double interval = .0001;

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import com.ryanb3.JavaCAS.Library.Functionv2;
+import com.ryanb3.JavaCAS.Library.Function;
 
 public class Worker extends Thread {
 
-	ArrayList<Functionv2> storage;
+	ArrayList<Function> storage;
 	String[] functions = { "1", "x", "abs(x)", "(x)^2", "1/(x)", "cos(x)", "sin(x)", "arctan(x)", "e^(x)", "ln(x)", "c" };
 	int[] costs = { 1, 7, 7, 12, 4, 14, 14, 3, 42, 4, 1 };
 	double[] weight = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
@@ -25,7 +25,7 @@ public class Worker extends Thread {
 
 	public Worker(int cost, int id, double start, double end, double interval, ArrayList<String> answers,
 			double minCount, ArrayList<Integer> count) {
-		this.storage = new ArrayList<Functionv2>();
+		this.storage = new ArrayList<Function>();
 		this.cost = cost;
 		this.start = start;
 		this.end = end;
@@ -41,7 +41,7 @@ public class Worker extends Thread {
 		String biggestFunc = "";
 		while ((System.currentTimeMillis() - startTime) / 60000 < minCount) {
 			addRandFunc();
-			Functionv2 x = storage.get(storage.size() - 1);
+			Function x = storage.get(storage.size() - 1);
 			double integral = x.integralOfFunc(start, end, interval);
 			if (integral > biggest && !undef(x)) {
 				biggestFunc = x.baseFunction;
@@ -76,7 +76,7 @@ public class Worker extends Thread {
 						toProcess.add(optimizeConstants(cost - price));
 					}
 				}
-				Functionv2 toAdd = randomFunction(toProcess);
+				Function toAdd = randomFunction(toProcess);
 				if (!storage.contains(toAdd)) {
 					storage.add(toAdd);
 					added = true;
@@ -122,11 +122,11 @@ public class Worker extends Thread {
 		return toReturn;
 	}
 
-	public Functionv2 getMostExtremas(ArrayList<Functionv2> toUse, double start, double end, double interval) {
+	public Function getMostExtremas(ArrayList<Function> toUse, double start, double end, double interval) {
 		double biggestVal = 0;
 		int count = 0;
-		Functionv2 biggestFunc = null;
-		for (Functionv2 x : toUse) {
+		Function biggestFunc = null;
+		for (Function x : toUse) {
 			count++;
 			double percent = (int) (10000 * 1 / (count / toUse.size())) / 10000;
 			if (percent % 20 == 0) {
@@ -141,10 +141,10 @@ public class Worker extends Thread {
 		return biggestFunc;
 	}
 
-	public Functionv2 getBiggestInt(ArrayList<Functionv2> toUse, double start, double end, double interval) {
+	public Function getBiggestInt(ArrayList<Function> toUse, double start, double end, double interval) {
 		double biggestVal = 0;
-		Functionv2 biggestFunc = null;
-		for (Functionv2 x : toUse) {
+		Function biggestFunc = null;
+		for (Function x : toUse) {
 			double current = x.integralOfFunc(start, end, interval);
 			if (current >= biggestVal && !undef(x)) {
 				biggestVal = current;
@@ -154,7 +154,7 @@ public class Worker extends Thread {
 		return biggestFunc;
 	}
 
-	public boolean undef(Functionv2 toCheck) {
+	public boolean undef(Function toCheck) {
 		if (toCheck.getValueAt(Math.PI) == Double.POSITIVE_INFINITY 
 				|| toCheck.getValueAt(1) == Double.POSITIVE_INFINITY
 				|| toCheck.getValueAt(Math.PI / 2) == Double.POSITIVE_INFINITY
@@ -166,11 +166,11 @@ public class Worker extends Thread {
 		return false;
 	}
 
-	public Functionv2 randomFunction(ArrayList<String> toUse) {
+	public Function randomFunction(ArrayList<String> toUse) {
 		ArrayList<String> functionVar = (ArrayList<String>) toUse.clone();
 		int start = (int) (Math.random() * functionVar.size());
 		double random = Math.random();
-		Functionv2 toReturn = new Functionv2(functionVar.get(start));
+		Function toReturn = new Function(functionVar.get(start));
 		functionVar.remove(start);
 		for (String x : functionVar) {
 			if (random < .25) {
