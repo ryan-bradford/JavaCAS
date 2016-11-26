@@ -1,10 +1,10 @@
-package com.ryanb3.JavaCAS.Test.FinishThread;
+package io.thaumavor.rbradford.JavaCAS.Test.FinishThread;
 
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import com.ryanb3.JavaCAS.Library.Function;
+import io.thaumavor.rbradford.JavaCAS.Library.Function;
 
 public class Finished extends Thread {
 

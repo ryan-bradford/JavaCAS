@@ -1,4 +1,4 @@
-package com.ryanb3.JavaCAS.Library;
+package io.thaumavor.rbradford.JavaCAS.Library;
 
 import java.util.ArrayList;
 

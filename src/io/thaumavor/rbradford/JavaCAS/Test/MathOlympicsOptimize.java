@@ -1,10 +1,9 @@
-package com.ryanb3.JavaCAS.Test;
+package io.thaumavor.rbradford.JavaCAS.Test;
 
 import java.util.ArrayList;
 
-
-import com.ryanb3.JavaCAS.Test.FinishThread.Finished;
-import com.ryanb3.JavaCAS.Test.Worker.Worker;
+import io.thaumavor.rbradford.JavaCAS.Test.FinishThread.Finished;
+import io.thaumavor.rbradford.JavaCAS.Test.Worker.Worker;
 
 public class MathOlympicsOptimize {
 
