@@ -9,7 +9,8 @@ import io.thaumavor.rbradford.JavaCAS.Library.Function;
 public class Worker extends Thread {
 
 	ArrayList<Function> storage;
-	String[] functions = { "1", "x", "abs(x)", "(x)^2", "1/(x)", "cos(x)", "sin(x)", "arctan(x)", "e^(x)", "ln(x)", "c" };
+	String[] functions = { "1", "x", "abs(x)", "(x)^2", "1/(x)", "cos(x)", "sin(x)", "arctan(x)", "e^(x)", "ln(x)",
+			"c" };
 	int[] costs = { 1, 7, 7, 12, 4, 14, 14, 3, 42, 4, 1 };
 	double[] weight = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 	int cost;
@@ -22,9 +23,12 @@ public class Worker extends Thread {
 	double startTime = System.currentTimeMillis();
 	ArrayList<Integer> count;
 	int timesChosen = 0;
-
+	double biggest = 0;
+	String biggestFunc = "";
+	ArrayList<Double> values;
+	
 	public Worker(int cost, int id, double start, double end, double interval, ArrayList<String> answers,
-			double minCount, ArrayList<Integer> count) {
+			double minCount, ArrayList<Integer> count, ArrayList<Double> values) {
 		this.storage = new ArrayList<Function>();
 		this.cost = cost;
 		this.start = start;
@@ -34,29 +38,62 @@ public class Worker extends Thread {
 		this.answers = answers;
 		this.minCount = minCount;
 		this.count = count;
+		this.values = values;
 	}
 
 	public void run() {
-		double biggest = 0;
-		String biggestFunc = "";
 		while ((System.currentTimeMillis() - startTime) / 60000 < minCount) {
-			addRandFunc();
-			Function x = storage.get(storage.size() - 1);
-			double integral = x.integralOfFunc(start, end, interval);
-			if (integral > biggest && !undef(x)) {
-				biggestFunc = x.baseFunction;
-				timesChosen++;
-				if (timesChosen > 20) {
-					changeWeight(biggestFunc);
-					timesChosen = 0;
-				}
-				biggest = integral;
+			try {
+				addRandFunc();
+				Function x = storage.get(storage.size() - 1);
+				doIntegral(x);
+			} catch (Exception ex) {
+
 			}
 		}
 		answers.add(biggestFunc);
 		count.add(storage.size());
+		values.add(biggest);
 	}
-
+	
+	public void doDeriv(Function x) {
+		double extremas = x.biggestDerivOfFunc(start, end, interval);
+		if (extremas > biggest && !undef(x)) {
+			biggestFunc = x.baseFunction;
+			timesChosen++;
+			if (timesChosen > 20) {
+				changeWeight(biggestFunc);
+				timesChosen = 0;
+			}
+			biggest = extremas;
+		}
+	}
+	
+	public void doExtremas(Function x) {
+		double extremas = x.getNumberOfExtremas(start, end, interval);
+		if (extremas > biggest && !undef(x)) {
+			biggestFunc = x.baseFunction;
+			timesChosen++;
+			if (timesChosen > 20) {
+				changeWeight(biggestFunc);
+				timesChosen = 0;
+			}
+			biggest = extremas;
+		}
+	}
+	
+	public void doIntegral(Function x) {
+		double integral = x.integralOfFunc(start, end, interval);
+		if (integral > biggest && !undef(x)) {
+			biggestFunc = x.baseFunction;
+			timesChosen++;
+			if (timesChosen > 20) {
+				changeWeight(biggestFunc);
+				timesChosen = 0;
+			}
+			biggest = integral;
+		}
+	}
 
 	public void addRandFunc() {
 		boolean added = false;
@@ -71,8 +108,8 @@ public class Worker extends Thread {
 				for (int x : next) {
 					toProcess.add(functions[x]);
 				}
-				if(price < cost) {
-					if(Math.random() > .5) {
+				if (price < cost) {
+					if (Math.random() > .5) {
 						toProcess.add(optimizeConstants(cost - price));
 					}
 				}
@@ -84,15 +121,15 @@ public class Worker extends Thread {
 			}
 		}
 	}
-	
+
 	public String optimizeConstants(double money) {
 		double total = 0;
 		double evenSquare = Math.floor(Math.sqrt(money));
 		double subtract = money - (evenSquare * evenSquare);
-		if(subtract == 0) {
+		if (subtract == 0) {
 			total = Math.pow(evenSquare, evenSquare);
 			return Double.toString(total);
-		} else if(subtract == 1) {
+		} else if (subtract == 1) {
 			total = Math.pow(evenSquare, evenSquare - 1);
 			total *= (evenSquare + 1);
 			return Double.toString(total);
@@ -155,8 +192,7 @@ public class Worker extends Thread {
 	}
 
 	public boolean undef(Function toCheck) {
-		if (toCheck.getValueAt(Math.PI) == Double.POSITIVE_INFINITY 
-				|| toCheck.getValueAt(1) == Double.POSITIVE_INFINITY
+		if (toCheck.getValueAt(Math.PI) == Double.POSITIVE_INFINITY || toCheck.getValueAt(1) == Double.POSITIVE_INFINITY
 				|| toCheck.getValueAt(Math.PI / 2) == Double.POSITIVE_INFINITY
 				|| toCheck.getValueAt(Math.tan(1)) == Double.POSITIVE_INFINITY
 				|| toCheck.getValueAt(0) == Double.POSITIVE_INFINITY) {
@@ -196,7 +232,7 @@ public class Worker extends Thread {
 		}
 		return totalCost;
 	}
-	
+
 	public void changeWeight(String func) {
 		if (func.contains("abs")) {
 			if (weight[2] < 5) {
@@ -210,7 +246,7 @@ public class Worker extends Thread {
 		if (func.contains("^2")) {
 			if (weight[3] < 5) {
 				weight[3]++;
-			} 
+			}
 		} else {
 			if (weight[3] > 1) {
 				weight[3]--;
@@ -219,7 +255,8 @@ public class Worker extends Thread {
 		if (func.contains("\\/")) {
 			if (weight[4] < 5) {
 				weight[4]++;
-			}		} else {
+			}
+		} else {
 			if (weight[4] > 1) {
 				weight[4]--;
 			}

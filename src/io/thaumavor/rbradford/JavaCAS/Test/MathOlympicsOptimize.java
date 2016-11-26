@@ -17,24 +17,26 @@ public class MathOlympicsOptimize {
 	double end;
 	ArrayList<String> answers;
 	ArrayList<Integer> count;
+	ArrayList<Double> values;
 	int coreCount = 4;
 
 	public MathOlympicsOptimize(int money, double start, double end, double interval, double minsToCount) {
 		answers = new ArrayList<String>();
+		values = new ArrayList<Double>();
 		count = new ArrayList<Integer>();
 		this.start = start;
 		this.end = end;
 		this.interval = interval;
 		this.minsToCount = minsToCount;
 		this.getPossibleFunctionsLists(money);
-		Finished finisher = new Finished(answers, start, end, interval, coreCount, count);
+		Finished finisher = new Finished(answers, coreCount, values, count);
 		finisher.start();
 	}
 	
 	public void getPossibleFunctionsLists(int cost) {
 		tests = new Worker[coreCount];
 		for(int i = 0; i < tests.length; i++) {
-			tests[i] = new Worker(cost, i, start, end, interval, answers, minsToCount, count);
+			tests[i] = new Worker(cost, i, start, end, interval, answers, minsToCount, count, values);
 			tests[i].start();
 		}
 	}

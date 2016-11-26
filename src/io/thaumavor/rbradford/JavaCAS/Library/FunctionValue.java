@@ -7,11 +7,11 @@ public class FunctionValue {
 
 	boolean broken = false;
 	Function baseFunction;
-	
+
 	public FunctionValue(Function baseFunction) {
 		this.baseFunction = baseFunction;
 	}
-	
+
 	public String simplifyNoGroups(String function, double at) {
 		String newFunction = "";
 		int count = 0;
@@ -59,7 +59,7 @@ public class FunctionValue {
 	}
 
 	public ArrayList<String> splitAtAddSub(String function) {
-		ArrayList<String> parts =  new ArrayList<String>(Arrays.asList(function.split("(\\+)|(\\-)")));
+		ArrayList<String> parts = new ArrayList<String>(Arrays.asList(function.split("(\\+)|(\\-)")));
 		return parts;
 	}
 
@@ -68,7 +68,7 @@ public class FunctionValue {
 		String newFunction = this.simplifyNoGroups(baseFunction.baseFunction, at);
 		ArrayList<String> firstSplit = this.splitAtAddSub(newFunction);
 		ArrayList<Double> values = doMultiDiv(firstSplit, at);
-		if(broken) {
+		if (broken) {
 			return Double.POSITIVE_INFINITY;
 		}
 		return doAddSub(newFunction, values, at);
@@ -82,7 +82,7 @@ public class FunctionValue {
 				values.set(count + 1, values.get(count) + values.get(count + 1));
 				values.remove(count);
 			}
-			if (x == '-' && i > 0 && !isOpperator(function.charAt(i-1))) {
+			if (x == '-' && i > 0 && !isOpperator(function.charAt(i - 1))) {
 				values.set(count + 1, values.get(count) - values.get(count + 1));
 				values.remove(count);
 			}
@@ -164,20 +164,20 @@ public class FunctionValue {
 		} else {
 			toReturn = (Double.parseDouble(z));
 		}
-		
+
 		if (negative) {
 			return -toReturn;
 		} else {
 			return toReturn;
 		}
 	}
-	
+
 	public boolean isOpperator(char stuff) {
-		if (stuff == '+' || stuff == '-' || stuff == '/' || stuff == '*' || stuff == '^' || stuff == '(' || stuff == ')'|| stuff == 'n'|| stuff == 's'|| stuff == 'E') {
+		if (stuff == '+' || stuff == '-' || stuff == '/' || stuff == '*' || stuff == '^' || stuff == '(' || stuff == ')'
+				|| stuff == 'n' || stuff == 's' || stuff == 'E') {
 			return true;
 		}
 		return false;
 	}
 
-	
 }

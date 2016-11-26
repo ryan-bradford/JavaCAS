@@ -9,19 +9,15 @@ import io.thaumavor.rbradford.JavaCAS.Library.Function;
 public class Finished extends Thread {
 
 	ArrayList<String> answers;
-	double start;
-	double end;
-	double interval;
-	int length;
+	ArrayList<Double> values;
 	ArrayList<Integer> count;
+	int length;
 	
-	public Finished(ArrayList<String> answers, double start, double end, double interval, int length, ArrayList<Integer> count) {
+	public Finished(ArrayList<String> answers, int length, ArrayList<Double> values, ArrayList<Integer> count) {
 		this.answers = answers;
-		this.start = start;
-		this.end = end;
-		this.interval = interval;
-		this.length = length;
 		this.count = count;
+		this.values = values;
+		this.length = length;
 	}
 	
 	public void run() {
@@ -36,15 +32,16 @@ public class Finished extends Thread {
 		String biggestFunc = "1";
 		double biggestVal = -1;
 		for(int i = 0; i < answers.size(); i++) {
-			if(new Function(answers.get(i)).integralOfFunc(start, end, interval) > biggestVal) {
+			if(Math.abs(values.get(i)) > biggestVal) {
 				biggestFunc = answers.get(i);
+				biggestVal = Math.abs(values.get(i));
 			}
 		}
 		double total = 0;
 		for(Integer x: count) {
 			total += x;
 		}
-		JOptionPane.showMessageDialog(null, "The biggest integral is: " + new Function(biggestFunc).integralOfFunc(start, end, interval) + 
+		JOptionPane.showMessageDialog(null, "The biggest value is: " + biggestVal + 
 				" of: " + biggestFunc + ". Checked " + total + " functions");
 	}
 }
