@@ -57,7 +57,7 @@ public class Worker extends Thread {
 	}
 	
 	public void doDeriv(Function x) {
-		double extremas = x.biggestDerivOfFunc(start, end, interval);
+		double extremas = x.calculus.biggestDerivOfFunc(start, end, interval);
 		if (extremas > biggest && !undef(x)) {
 			biggestFunc = x.baseFunction;
 			timesChosen++;
@@ -70,7 +70,7 @@ public class Worker extends Thread {
 	}
 	
 	public void doExtremas(Function x) {
-		double extremas = x.getNumberOfExtremas(start, end, interval);
+		double extremas = x.calculus.getNumberOfExtremas(start, end, interval);
 		if (extremas > biggest && !undef(x)) {
 			biggestFunc = x.baseFunction;
 			timesChosen++;
@@ -83,7 +83,7 @@ public class Worker extends Thread {
 	}
 	
 	public void doIntegral(Function x) {
-		double integral = x.integralOfFunc(start, end, interval);
+		double integral = x.calculus.integralOfFunc(start, end, interval);
 		if (integral > biggest && !undef(x)) {
 			biggestFunc = x.baseFunction;
 			timesChosen++;
@@ -169,7 +169,7 @@ public class Worker extends Thread {
 			if (percent % 20 == 0) {
 				JOptionPane.showMessageDialog(null, "%" + percent + " Done");
 			}
-			double current = x.getNumberOfExtremas(start, end, interval);
+			double current = x.calculus.getNumberOfExtremas(start, end, interval);
 			if (current >= biggestVal && !undef(x)) {
 				biggestVal = current;
 				biggestFunc = x;
@@ -182,7 +182,7 @@ public class Worker extends Thread {
 		double biggestVal = 0;
 		Function biggestFunc = null;
 		for (Function x : toUse) {
-			double current = x.integralOfFunc(start, end, interval);
+			double current = x.calculus.integralOfFunc(start, end, interval);
 			if (current >= biggestVal && !undef(x)) {
 				biggestVal = current;
 				biggestFunc = x;
@@ -210,15 +210,15 @@ public class Worker extends Thread {
 		functionVar.remove(start);
 		for (String x : functionVar) {
 			if (random < .25) {
-				toReturn.insertFunctionAtRandomPoint(x);
+				toReturn.change.insertFunctionAtRandomPoint(x);
 			} else {
-				int levelToInsertAt = (int) (toReturn.getLevels() * Math.random());
+				int levelToInsertAt = (int) (toReturn.change.getLevels() * Math.random());
 				if (random < .5) {
-					toReturn.addFuncAtLevel(x, levelToInsertAt);
+					toReturn.change.addFuncAtLevel(x, levelToInsertAt);
 				} else if (random < .75) {
-					toReturn.multiplyFuncAtLevel(x, levelToInsertAt);
+					toReturn.change.multiplyFuncAtLevel(x, levelToInsertAt);
 				} else {
-					toReturn.subtractFuncAtLevel(x, levelToInsertAt);
+					toReturn.change.subtractFuncAtLevel(x, levelToInsertAt);
 				}
 			}
 		}

@@ -1,14 +1,15 @@
-package io.thaumavor.rbradford.JavaCAS.Library;
+package io.thaumavor.rbradford.JavaCAS.Library.FunctionTools;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class FunctionValue {
+import io.thaumavor.rbradford.JavaCAS.Library.Function;
 
-	boolean broken = false;
+public class Value {
+
 	Function baseFunction;
 
-	public FunctionValue(Function baseFunction) {
+	public Value(Function baseFunction) {
 		this.baseFunction = baseFunction;
 	}
 
@@ -64,11 +65,10 @@ public class FunctionValue {
 	}
 
 	public double getValueAt(double at) {
-		broken = false;
 		String newFunction = this.simplifyNoGroups(baseFunction.baseFunction, at);
 		ArrayList<String> firstSplit = this.splitAtAddSub(newFunction);
 		ArrayList<Double> values = doMultiDiv(firstSplit, at);
-		if (broken) {
+		if (values.contains(Double.POSITIVE_INFINITY)) {
 			return Double.POSITIVE_INFINITY;
 		}
 		return doAddSub(newFunction, values, at);
@@ -82,7 +82,7 @@ public class FunctionValue {
 				values.set(count + 1, values.get(count) + values.get(count + 1));
 				values.remove(count);
 			}
-			if (x == '-' && i > 0 && !isOpperator(function.charAt(i - 1))) {
+			if (x == '-' && i > 0 && !baseFunction.general.isOpperator(function.charAt(i - 1))) {
 				values.set(count + 1, values.get(count) - values.get(count + 1));
 				values.remove(count);
 			}
@@ -96,7 +96,7 @@ public class FunctionValue {
 			ArrayList<Double> tempValues = new ArrayList<Double>();
 			ArrayList<String> secondSplit = this.splitAtMultiDiv(y);
 			for (String z : secondSplit) {
-				tempValues.add(this.getValueOfPart(z, at));
+				tempValues.add(baseFunction.general.getValueOfPart(z, at));
 			}
 			int count = 0;
 			for (char stuff : y.toCharArray()) {
@@ -113,71 +113,6 @@ public class FunctionValue {
 			values.addAll(tempValues);
 		}
 		return values;
-	}
-
-	public double getValueOfPart(String z, double at) {
-		double toReturn = 0;
-		boolean negative = false;
-		if (z.contains("-") && z.charAt(0) == '-') {
-			negative = true;
-			z = z.substring(1, z.length());
-		}
-		if (z.equals("x")) {
-			toReturn = at;
-		} else if (z.contains("Infinity")) {
-			broken = true;
-			toReturn = 0;
-		} else if (z.contains("^")) {
-			String[] halves = z.split("\\^");
-			toReturn = (Math.pow(getValueOfPart(halves[0], at), getValueOfPart(halves[1], at)));
-		} else if (z.contains("arctan")) {
-			String[] halves = z.split("n");
-			toReturn = (Math.atan(getValueOfPart(halves[1], at)));
-		} else if (z.contains("arcsin")) {
-			String[] halves = z.split("n");
-			toReturn = (Math.asin(getValueOfPart(halves[1], at)));
-		} else if (z.contains("arccos")) {
-			String[] halves = z.split("s");
-			toReturn = (Math.acos(getValueOfPart(halves[1], at)));
-		} else if (z.contains("sin")) {
-			String[] halves = z.split("n");
-			toReturn = (Math.sin(getValueOfPart(halves[1], at)));
-		} else if (z.contains("cos")) {
-			String[] halves = z.split("s");
-			toReturn = (Math.cos(getValueOfPart(halves[1], at)));
-		} else if (z.contains("tan")) {
-			String[] halves = z.split("n");
-			toReturn = (Math.sin(getValueOfPart(halves[1], at)));
-		} else if (z.contains("ln")) {
-			String[] halves = z.split("n");
-			toReturn = (Math.log(getValueOfPart(halves[1], at)));
-		} else if (z.contains("log")) {
-			String[] halves = z.split("n");
-			toReturn = (Math.log10(getValueOfPart(halves[1], at)));
-		} else if (z.contains("abs")) {
-			String[] halves = z.split("s");
-			toReturn = (Math.abs(getValueOfPart(halves[1], at)));
-		} else if (z.equals("PI")) {
-			toReturn = (Math.PI);
-		} else if (z.equals("e")) {
-			toReturn = (Math.E);
-		} else {
-			toReturn = (Double.parseDouble(z));
-		}
-
-		if (negative) {
-			return -toReturn;
-		} else {
-			return toReturn;
-		}
-	}
-
-	public boolean isOpperator(char stuff) {
-		if (stuff == '+' || stuff == '-' || stuff == '/' || stuff == '*' || stuff == '^' || stuff == '(' || stuff == ')'
-				|| stuff == 'n' || stuff == 's' || stuff == 'E') {
-			return true;
-		}
-		return false;
 	}
 
 }

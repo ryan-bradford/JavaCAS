@@ -1,12 +1,14 @@
-package io.thaumavor.rbradford.JavaCAS.Library;
+package io.thaumavor.rbradford.JavaCAS.Library.FunctionTools.Algebric;
 
 import java.util.ArrayList;
 
-public class FunctionChangers {
+import io.thaumavor.rbradford.JavaCAS.Library.Function;
+
+public class Change {
 
 	Function baseFunction;
 	
-	public FunctionChangers(Function baseFunction) {
+	public Change(Function baseFunction) {
 		this.baseFunction = baseFunction;
 	}
 	

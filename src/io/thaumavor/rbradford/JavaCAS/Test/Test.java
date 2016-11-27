@@ -14,7 +14,9 @@ public class Test {
 
 	public Test() {
 		//Worker x = new Worker(0, 0, interval, interval, interval, null, interval, null);
-		standardStart();
+		//standardStart();
+		Function x = new Function("1+(1+1)^2+(1^2+2)^2");
+		x.simplify.simplify();
 	}
 	
 	public void standardStart() {
@@ -49,11 +51,10 @@ public class Test {
 	}
 	
 	public void derivativeStart() {
-		JOptionPane.showMessageDialog(null, "Use * for multiplication \n ^ for exponents");
 		String entered = JOptionPane.showInputDialog("Enter a function that you want the derivative of:");
 		Function text = new Function(entered);
 		Double start = Double.parseDouble(JOptionPane.showInputDialog("Where to get the derivative at?"));
-		JOptionPane.showMessageDialog(null, "The derivative of f at " + start + " is: " + text.derivOfFunc(start, interval));
+		JOptionPane.showMessageDialog(null, "The derivative of f at " + start + " is: " + text.calculus.derivOfFunc(start, interval));
 	}
 	
 	public void biggestDerivativeStart() {
@@ -61,7 +62,7 @@ public class Test {
 		Function text = new Function(entered);
 		Double start = Double.parseDouble(JOptionPane.showInputDialog("What is the start point?"));
 		Double end = Double.parseDouble(JOptionPane.showInputDialog("What is the end point?"));
-		JOptionPane.showMessageDialog(null, "The biggest derivative between " + start + " and " + end + " is: " + text.biggestDerivOfFunc(start, end, interval));
+		JOptionPane.showMessageDialog(null, "The biggest derivative between " + start + " and " + end + " is: " + text.calculus.biggestDerivOfFunc(start, end, interval));
 	}
 	
 	public void integralStart() {
@@ -69,7 +70,7 @@ public class Test {
 		Function text = new Function(entered);
 		Double start = Double.parseDouble(JOptionPane.showInputDialog("Where to get the integral from?"));
 		Double end = Double.parseDouble(JOptionPane.showInputDialog("Where to get the integral to?"));
-		JOptionPane.showMessageDialog(null, "The integral of f from " + start + " to  " + end + " is: " + text.integralOfFunc(start, end, interval));
+		JOptionPane.showMessageDialog(null, "The integral of f from " + start + " to  " + end + " is: " + text.calculus.integralOfFunc(start, end, interval));
 	}
 	
 	public void functionStart() {
@@ -85,7 +86,7 @@ public class Test {
 		Double start = Double.parseDouble(JOptionPane.showInputDialog("Start x"));
 		Double end = Double.parseDouble(JOptionPane.showInputDialog("End x"));
 		Double interval = .0001;
-		JOptionPane.showMessageDialog(null, "The # from " + start + " to " + end + " is: " + text.getNumberOfExtremas(start, end, interval));
+		JOptionPane.showMessageDialog(null, "The # from " + start + " to " + end + " is: " + text.calculus.getNumberOfExtremas(start, end, interval));
 	}
 
 
