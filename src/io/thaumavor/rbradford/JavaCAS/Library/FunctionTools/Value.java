@@ -98,16 +98,13 @@ public class Value {
 			for (String z : secondSplit) {
 				tempValues.add(baseFunction.general.getValueOfPart(z, at));
 			}
-			int count = 0;
 			for (char stuff : y.toCharArray()) {
 				if (stuff == '*') {
-					tempValues.set(count + 1, tempValues.get(count) * tempValues.get(count + 1));
-					tempValues.remove(count);
-					count++;
+					tempValues.set(1, tempValues.get(0) * tempValues.get(1));
+					tempValues.remove(0);
 				} else if (stuff == '/') {
-					tempValues.set(count + 1, tempValues.get(count) / tempValues.get(count + 1));
-					tempValues.remove(count);
-					count++;
+					tempValues.set(1, tempValues.get(0) / tempValues.get(1));
+					tempValues.remove(0);
 				}
 			}
 			values.addAll(tempValues);
