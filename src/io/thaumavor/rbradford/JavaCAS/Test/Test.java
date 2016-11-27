@@ -15,9 +15,9 @@ public class Test {
 	public Test() {
 		//Worker x = new Worker(0, 0, interval, interval, interval, null, interval, null);
 		//standardStart();
-		Function x = new Function("(x*1)^(PI/2)+1+(x*1)^(PI/2)/(x+1)");
+		Function x = new Function("(x*1)^(1.5)+1+(x*1)^(1.5)/(x+1)");
 		x.simplify.simplify();
-		System.out.println(x.getValueAt(2));
+		//System.out.println(x.getValueAt(2));
 	}
 	
 	public void standardStart() {

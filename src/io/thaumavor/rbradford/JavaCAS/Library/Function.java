@@ -4,7 +4,7 @@ import io.thaumavor.rbradford.JavaCAS.Library.FunctionTools.Calculus;
 import io.thaumavor.rbradford.JavaCAS.Library.FunctionTools.General;
 import io.thaumavor.rbradford.JavaCAS.Library.FunctionTools.Value;
 import io.thaumavor.rbradford.JavaCAS.Library.FunctionTools.Algebric.Change;
-import io.thaumavor.rbradford.JavaCAS.Library.FunctionTools.Algebric.Simplify;
+import io.thaumavor.rbradford.JavaCAS.Library.FunctionTools.Algebric.Simplification.Simplify;
 
 public class Function {
 
