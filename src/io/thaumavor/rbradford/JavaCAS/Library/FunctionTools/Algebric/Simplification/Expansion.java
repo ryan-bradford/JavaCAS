@@ -16,7 +16,10 @@ public class Expansion {
 	
 	public void expand() {
 		expandExponents();
-		ArrayList<ArrayList<String>> parts = splitIntoLargestParts();
+		ArrayList<String> delims = new ArrayList<String>();
+		delims.add("+");
+		delims.add("-");
+		ArrayList<ArrayList<String>> parts = simplify.splitIntoLargestParts(delims);
 		simplify.newFunction = "";
 		if (parts.get(0).size() != 1) {
 			int count = 0;
@@ -111,37 +114,6 @@ public class Expansion {
 			}
 		return new int[]{0,0};
 
-	}
-
-	public ArrayList<ArrayList<String>> splitIntoLargestParts() {
-		int levelsIn = 0;
-		int firstTouched = 0;
-		ArrayList<String> parts = new ArrayList<String>();
-		ArrayList<String> opperators = new ArrayList<String>();
-		ArrayList<ArrayList<String>> toReturn = new ArrayList<ArrayList<String>>();
-		if (!(simplify.newFunction.contains("+") || simplify.newFunction.contains("-"))) {
-			parts.add(simplify.newFunction);
-			toReturn.add(parts);
-			toReturn.add(opperators);
-			return toReturn;
-		}
-		for (int i = 0; i < simplify.newFunction.length(); i++) {
-			if ((simplify.newFunction.charAt(i) == '+' || simplify.newFunction.charAt(i) == '-') && levelsIn == 0) {
-				parts.add(simplify.newFunction.substring(firstTouched, i));
-				opperators.add(Character.toString(simplify.newFunction.charAt(i)));
-				firstTouched = i + 1;
-			} else if (simplify.newFunction.charAt(i) == '(') {
-				levelsIn++;
-			} else if (simplify.newFunction.charAt(i) == ')') {
-				levelsIn--;
-			}
-			if (i == simplify.newFunction.length() - 1 && simplify.newFunction.charAt(i) != '+') {
-				parts.add(simplify.newFunction.substring(firstTouched, i + 1));
-			}
-		}
-		toReturn.add(parts);
-		toReturn.add(opperators);
-		return toReturn;
 	}
 	
 }
