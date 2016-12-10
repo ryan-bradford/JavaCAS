@@ -1,4 +1,4 @@
-package io.thaumavor.rbradford.JavaCAS.Test;
+package io.thaumavor.rbradford.JavaCAS.MathOlympics;
 
 import javax.swing.JOptionPane;
 
@@ -14,9 +14,10 @@ public class Test {
 
 	public Test() {
 		//Worker x = new Worker(0, 0, interval, interval, interval, null, interval, null);
-		//standardStart();
-		Function x = new Function("(x*1)^(1.5)+1+(x*1)^(1.5)/(x+1)");
-		x.simplify.simplify();
+		standardStart();
+		//Function x = new Function("(x*1)^(1.5)+1+(x*1)^(1.5)/(x*1)");
+		//System.out.println(x.getValueAt(2));
+		//x.simplify.simplify();
 		//System.out.println(x.getValueAt(2));
 	}
 	

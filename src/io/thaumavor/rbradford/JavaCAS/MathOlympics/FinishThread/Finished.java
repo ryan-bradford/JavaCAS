@@ -1,4 +1,4 @@
-package io.thaumavor.rbradford.JavaCAS.Test.FinishThread;
+package io.thaumavor.rbradford.JavaCAS.MathOlympics.FinishThread;
 
 import java.util.ArrayList;
 

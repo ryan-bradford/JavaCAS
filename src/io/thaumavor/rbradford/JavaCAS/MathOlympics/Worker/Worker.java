@@ -1,4 +1,4 @@
-package io.thaumavor.rbradford.JavaCAS.Test.Worker;
+package io.thaumavor.rbradford.JavaCAS.MathOlympics.Worker;
 
 import java.util.ArrayList;
 

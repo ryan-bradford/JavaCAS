@@ -60,7 +60,34 @@ public class Value {
 	}
 
 	public ArrayList<String> splitAtAddSub(String function) {
-		ArrayList<String> parts = new ArrayList<String>(Arrays.asList(function.split("(\\+)|(\\-)")));
+		ArrayList<Integer> values = new ArrayList<Integer>();
+		ArrayList<String> parts = new ArrayList<String>();
+		if(!function.contains("+") && !function.contains("-")) {
+			parts.add(function);
+			return parts;
+		}
+		for(int i = 0; i < function.toCharArray().length; i++) {
+			if(function.charAt(i) == '+' || function.charAt(i) == '-') {
+				if(i == 0) {
+
+				} else {
+					if(Character.isDigit(function.toCharArray()[i - 1])) {
+						values.add(i);
+					}
+				}
+			}
+		}
+		if(values.size() > 0) {
+			parts.add(function.substring(0, values.get(0)));
+			for(int i = 1; i < values.size(); i++) {
+				if(i != values.size() - 1) {
+					parts.add(function.substring(values.get(i), values.get(i+1)));
+				}
+			}
+			parts.add(function.substring(values.get(values.size() - 1), function.toCharArray().length));
+		} else {
+			parts.add(function);
+		}
 		return parts;
 	}
 

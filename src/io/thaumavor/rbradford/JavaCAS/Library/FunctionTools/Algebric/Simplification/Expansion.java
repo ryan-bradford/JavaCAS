@@ -8,7 +8,7 @@ public class Expansion {
 
 	Simplify simplify;
 	Function superFunction;
-	
+
 	public Expansion(Simplify simplify) {
 		this.simplify = simplify;
 		superFunction = simplify.superFunction;
@@ -19,7 +19,7 @@ public class Expansion {
 		ArrayList<String> delims = new ArrayList<String>();
 		delims.add("+");
 		delims.add("-");
-		ArrayList<ArrayList<String>> parts = simplify.splitIntoLargestParts(delims);
+		ArrayList<ArrayList<String>> parts = simplify.splitIntoLargestParts(delims, simplify.newFunction);
 		simplify.newFunction = "";
 		if (parts.get(0).size() != 1) {
 			int count = 0;

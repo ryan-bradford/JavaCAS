@@ -1,5 +1,7 @@
 package io.thaumavor.rbradford.JavaCAS.Library.FunctionTools;
 
+import io.thaumavor.rbradford.JavaCAS.Library.Function;
+
 public class General {
 
 	public double getValueOfPart(String z, double at) {
