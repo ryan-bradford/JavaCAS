@@ -19,7 +19,9 @@ public class GraphDisplay extends JPanel {
 	int startX = -10;
 	int startY = 0;
 	int graphWidth = 20;
-	int graphPixelWidth = 500;
+	int graphHeight = 20;
+	int graphPixelWidth = 1920;
+	int graphPixelHeight = 1080;
 	
 	public GraphDisplay(ArrayList<Function> function) {
 		this.function = function;
@@ -55,14 +57,14 @@ public class GraphDisplay extends JPanel {
 		for(double x = lowerBound; x < (upperBound); x += interval) {
 			double yCordF = f.getValueAt(x);
 			yCordF *= -1;
-			yCordF *= new Double(graphPixelWidth);
-			yCordF /= new Double(graphWidth);
-			yCordF += graphPixelWidth /  2;
+			yCordF *= new Double(graphPixelHeight);
+			yCordF /= new Double(graphHeight);
+			yCordF += graphPixelHeight /  2;
 			double yCordG = g.getValueAt(x);
 			yCordG *= -1;
-			yCordG *= new Double(graphPixelWidth);
-			yCordG /= new Double(graphWidth);
-			yCordG += graphPixelWidth /  2;
+			yCordG *= new Double(graphPixelHeight);
+			yCordG /= new Double(graphHeight);
+			yCordG += graphPixelHeight /  2;
 			double shift = (new Double(startX));
 			double xCord = (x - shift) * new Double(graphPixelWidth);
 			xCord /= new Double(graphWidth);
@@ -87,9 +89,9 @@ public class GraphDisplay extends JPanel {
 		for(double x = startX; x < (startX + graphWidth); x += interval) {
 			double yCord = f.getValueAt(x);
 			yCord *= -1;
-			yCord *= new Double(graphPixelWidth);
-			yCord /= new Double(graphWidth);
-			yCord += graphPixelWidth /  2;
+			yCord *= new Double(graphPixelHeight);
+			yCord /= new Double(graphHeight);
+			yCord += graphPixelHeight /  2;
 			double shift = (new Double(startX));
 			double xCord = (x - shift) * new Double(graphPixelWidth);
 			xCord /= new Double(graphWidth);

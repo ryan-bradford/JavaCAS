@@ -35,7 +35,7 @@ public class General {
 			toReturn = (Math.cos(getValueOfPart(halves[1], at)));
 		} else if (z.contains("tan")) {
 			String[] halves = z.split("n");
-			toReturn = (Math.sin(getValueOfPart(halves[1], at)));
+			toReturn = (Math.tan(getValueOfPart(halves[1], at)));
 		} else if (z.contains("ln")) {
 			String[] halves = z.split("n");
 			toReturn = (Math.log(getValueOfPart(halves[1], at)));
