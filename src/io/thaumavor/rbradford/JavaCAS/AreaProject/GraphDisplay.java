@@ -1,6 +1,8 @@
 package io.thaumavor.rbradford.JavaCAS.AreaProject;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.util.ArrayList;
 
@@ -53,7 +55,7 @@ public class GraphDisplay extends JPanel {
 		Integer lastX = null;
 		Integer lastYG = null;
 		Integer lastYF = null;
-		double interval = new Double(upperBound - lowerBound) / new Double(graphPixelWidth);
+		double interval = new Double(graphWidth) * new Double(upperBound - lowerBound) / new Double(graphPixelWidth);
 		for(double x = lowerBound; x < (upperBound); x += interval) {
 			double yCordF = f.getValueAt(x);
 			yCordF *= -1;
@@ -68,13 +70,15 @@ public class GraphDisplay extends JPanel {
 			double shift = (new Double(startX));
 			double xCord = (x - shift) * new Double(graphPixelWidth);
 			xCord /= new Double(graphWidth);
+			System.out.println(xCord);
 			if(lastX != null && lastYF != null) {
 				Polygon toDraw = new Polygon();
 				toDraw.addPoint(lastX, lastYF);
 				toDraw.addPoint(lastX, lastYG);
 				toDraw.addPoint((int)xCord, (int)yCordG);
 				toDraw.addPoint((int)xCord, (int)yCordF);
-				graph.drawPolygon(toDraw);
+				graph.setColor(Rainbow.getNextColor());
+				graph.fillPolygon(toDraw);
 			}
 			lastX = (int) xCord;
 			lastYF = (int) yCordF;
@@ -82,7 +86,10 @@ public class GraphDisplay extends JPanel {
 		}
 	}
 	
-	public void drawFunction(Function f, Graphics graph) {
+	public void drawFunction(Function f, Graphics graph1) {
+		Graphics2D graph = (Graphics2D)graph1;
+		graph.setColor(Rainbow.getRandom());
+		graph.setStroke(new BasicStroke(5));
 		Integer lastX = null;
 		Integer lastY = null;
 		double interval = new Double(graphWidth) / new Double(graphPixelWidth);

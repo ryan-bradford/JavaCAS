@@ -13,7 +13,7 @@ public class Area {
 		frame.setBounds(0, 0, 1920, 1080);
 		frame.setVisible(true);
 		Function f = new Function("sin(3*x)");
-		Function g = new Function("tan(x)");		
+		Function g = new Function("cos(x)");		
 		ArrayList<Function> array = new ArrayList<Function>();
 		array.add(f);
 		array.add(g);
