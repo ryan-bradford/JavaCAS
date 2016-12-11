@@ -13,7 +13,7 @@ public class Area {
 		frame.setBounds(0, 0, 500, 500);
 		frame.setVisible(true);
 		Function f = new Function("sin(3*x)");
-		Function g = new Function("sin(10*x)+(e^x)");
+		Function g = new Function("sin(10*x)+e^(x)+e^(-x)");		
 		ArrayList<Function> array = new ArrayList<Function>();
 		array.add(f);
 		array.add(g);
@@ -21,6 +21,7 @@ public class Area {
 		frame.add(display);
 		display.repaint();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		
 	}
 	

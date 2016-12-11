@@ -69,10 +69,10 @@ public class Value {
 		for(int i = 0; i < function.toCharArray().length; i++) {
 			if(function.charAt(i) == '+' || function.charAt(i) == '-') {
 				if(i == 0) {
-
 				} else {
-					if(Character.isDigit(function.toCharArray()[i - 1])) {
+					if(Character.isDigit(function.toCharArray()[i - 1]) || function.toCharArray()[i - 1] == 'x' || function.toCharArray()[i - 1] == ')') {
 						values.add(i);
+					} else {
 					}
 				}
 			}
@@ -80,11 +80,11 @@ public class Value {
 		if(values.size() > 0) {
 			parts.add(function.substring(0, values.get(0)));
 			for(int i = 1; i < values.size(); i++) {
-				if(i != values.size() - 1) {
-					parts.add(function.substring(values.get(i), values.get(i+1)));
+				if(i != values.size()) {
+					parts.add(function.substring(values.get(i - 1)+1, values.get(i)));
 				}
 			}
-			parts.add(function.substring(values.get(values.size() - 1), function.toCharArray().length));
+			parts.add(function.substring(values.get(values.size() - 1)+1, function.toCharArray().length));
 		} else {
 			parts.add(function);
 		}
