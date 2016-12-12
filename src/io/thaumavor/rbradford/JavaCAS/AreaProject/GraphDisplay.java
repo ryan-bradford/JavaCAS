@@ -70,7 +70,6 @@ public class GraphDisplay extends JPanel {
 			double shift = (new Double(startX));
 			double xCord = (x - shift) * new Double(graphPixelWidth);
 			xCord /= new Double(graphWidth);
-			System.out.println(xCord);
 			if(lastX != null && lastYF != null) {
 				Polygon toDraw = new Polygon();
 				toDraw.addPoint(lastX, lastYF);

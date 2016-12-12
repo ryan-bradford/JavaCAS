@@ -1,12 +1,12 @@
-package io.thaumavor.rbradford.JavaCAS.Library.FunctionTools;
+package io.thaumavor.rbradford.JavaCAS.Library.FunctionTools.Calculus;
 
 import io.thaumavor.rbradford.JavaCAS.Library.Function;
 
-public class Calculus {
+public class GeneralCalculus {
 
 	Function superFunction;
 	
-	public Calculus(Function baseFunction) {
+	public GeneralCalculus(Function baseFunction) {
 		this.superFunction = baseFunction;
 	}
 	

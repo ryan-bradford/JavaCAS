@@ -1,7 +1,6 @@
 package io.thaumavor.rbradford.JavaCAS.AreaProject;
 
 import java.awt.Color;
-import java.util.ArrayList;
 
 public class Rainbow {
 
@@ -17,7 +16,7 @@ public class Rainbow {
 	}
 	
 	public static Color getRandom() {
-		return rainbow[(int)Math.round(Math.random() * (double)(rainbow.length)) - 1];
+		return rainbow[(int)Math.floor(Math.random() * (double)(rainbow.length))];
 	}
 	
 	

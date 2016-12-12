@@ -13,7 +13,7 @@ public class Value {
 		this.baseFunction = baseFunction;
 	}
 
-	public String simplifyNoGroups(String function, double at) {
+	public String simplifyNoGroups(String function, double xCord, double yCord) {
 		String newFunction = "";
 		int count = 0;
 		int start = 0;
@@ -46,7 +46,7 @@ public class Value {
 					stringStart = stringStart.substring(1, stringStart.length());
 				}
 				newFunction += stringStart;
-				newFunction += Double.toString(new Function(function.substring(start + 1, end)).getValueAt(at));
+				newFunction += Double.toString(new Function(function.substring(start + 1, end)).getValueAt(xCord, yCord));
 				finished = false;
 			}
 		}
@@ -91,17 +91,17 @@ public class Value {
 		return parts;
 	}
 
-	public double getValueAt(double at) {
-		String newFunction = this.simplifyNoGroups(baseFunction.baseFunction, at);
+	public double getValueAt(double xCord, double yCord) {
+		String newFunction = this.simplifyNoGroups(baseFunction.baseFunction, xCord, yCord);
 		ArrayList<String> firstSplit = this.splitAtAddSub(newFunction);
-		ArrayList<Double> values = doMultiDiv(firstSplit, at);
+		ArrayList<Double> values = doMultiDiv(firstSplit, xCord, yCord);
 		if (values.contains(Double.POSITIVE_INFINITY)) {
 			return Double.POSITIVE_INFINITY;
 		}
-		return doAddSub(newFunction, values, at);
+		return doAddSub(newFunction, values, xCord, yCord);
 	}
 
-	public double doAddSub(String function, ArrayList<Double> values, double at) {
+	public double doAddSub(String function, ArrayList<Double> values, double xCord, double yCord) {
 		int count = 0;
 		for (int i = 0; i < function.length(); i++) {
 			char x = function.charAt(i);
@@ -117,13 +117,13 @@ public class Value {
 		return values.get(0);
 	}
 
-	public ArrayList<Double> doMultiDiv(ArrayList<String> firstSplit, double at) {
+	public ArrayList<Double> doMultiDiv(ArrayList<String> firstSplit, double xCord, double yCord) {
 		ArrayList<Double> values = new ArrayList<Double>();
 		for (String y : firstSplit) {
 			ArrayList<Double> tempValues = new ArrayList<Double>();
 			ArrayList<String> secondSplit = this.splitAtMultiDiv(y);
 			for (String z : secondSplit) {
-				tempValues.add(baseFunction.general.getValueOfPart(z, at));
+				tempValues.add(baseFunction.general.getValueOfPart(z, xCord, yCord));
 			}
 			for (char stuff : y.toCharArray()) {
 				if (stuff == '*') {

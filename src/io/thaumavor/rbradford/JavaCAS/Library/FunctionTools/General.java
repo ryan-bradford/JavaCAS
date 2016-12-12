@@ -1,10 +1,8 @@
 package io.thaumavor.rbradford.JavaCAS.Library.FunctionTools;
 
-import io.thaumavor.rbradford.JavaCAS.Library.Function;
-
 public class General {
 
-	public double getValueOfPart(String z, double at) {
+	public double getValueOfPart(String z, double xCord, double yCord) {
 		double toReturn = 0;
 		boolean negative = false;
 		if (z.contains("-") && z.charAt(0) == '-') {
@@ -12,39 +10,41 @@ public class General {
 			z = z.substring(1, z.length());
 		}
 		if (z.equals("x")) {
-			toReturn = at;
+			toReturn = xCord;
+		} else if (z.equals("y")) {
+			toReturn = yCord;
 		} else if (z.contains("Infinity")) {
 			toReturn = Double.POSITIVE_INFINITY;
 		} else if (z.contains("^")) {
 			String[] halves = z.split("\\^");
-			toReturn = (Math.pow(getValueOfPart(halves[0], at), getValueOfPart(halves[1], at)));
+			toReturn = (Math.pow(getValueOfPart(halves[0], xCord, yCord), getValueOfPart(halves[1], xCord, yCord)));
 		} else if (z.contains("arctan")) {
 			String[] halves = z.split("n");
-			toReturn = (Math.atan(getValueOfPart(halves[1], at)));
+			toReturn = (Math.atan(getValueOfPart(halves[1], xCord, yCord)));
 		} else if (z.contains("arcsin")) {
 			String[] halves = z.split("n");
-			toReturn = (Math.asin(getValueOfPart(halves[1], at)));
+			toReturn = (Math.asin(getValueOfPart(halves[1], xCord, yCord)));
 		} else if (z.contains("arccos")) {
 			String[] halves = z.split("s");
-			toReturn = (Math.acos(getValueOfPart(halves[1], at)));
+			toReturn = (Math.acos(getValueOfPart(halves[1], xCord, yCord)));
 		} else if (z.contains("sin")) {
 			String[] halves = z.split("n");
-			toReturn = (Math.sin(getValueOfPart(halves[1], at)));
+			toReturn = (Math.sin(getValueOfPart(halves[1], xCord, yCord)));
 		} else if (z.contains("cos")) {
 			String[] halves = z.split("s");
-			toReturn = (Math.cos(getValueOfPart(halves[1], at)));
+			toReturn = (Math.cos(getValueOfPart(halves[1], xCord, yCord)));
 		} else if (z.contains("tan")) {
 			String[] halves = z.split("n");
-			toReturn = (Math.tan(getValueOfPart(halves[1], at)));
+			toReturn = (Math.tan(getValueOfPart(halves[1], xCord, yCord)));
 		} else if (z.contains("ln")) {
 			String[] halves = z.split("n");
-			toReturn = (Math.log(getValueOfPart(halves[1], at)));
+			toReturn = (Math.log(getValueOfPart(halves[1], xCord, yCord)));
 		} else if (z.contains("log")) {
 			String[] halves = z.split("n");
-			toReturn = (Math.log10(getValueOfPart(halves[1], at)));
+			toReturn = (Math.log10(getValueOfPart(halves[1], xCord, yCord)));
 		} else if (z.contains("abs")) {
 			String[] halves = z.split("s");
-			toReturn = (Math.abs(getValueOfPart(halves[1], at)));
+			toReturn = (Math.abs(getValueOfPart(halves[1], xCord, yCord)));
 		} else if (z.equals("PI")) {
 			toReturn = (Math.PI);
 		} else if (z.equals("e")) {
