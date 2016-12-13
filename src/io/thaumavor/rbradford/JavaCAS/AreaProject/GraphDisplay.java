@@ -22,8 +22,8 @@ public class GraphDisplay extends JPanel {
 	int startY = 0;
 	int graphWidth = 20;
 	int graphHeight = 20;
-	int graphPixelWidth = 1920;
-	int graphPixelHeight = 1080;
+	int graphPixelWidth = 1280;
+	int graphPixelHeight = 720;
 
 	public GraphDisplay(ArrayList<Function> function) {
 		this.function = function;
@@ -72,7 +72,7 @@ public class GraphDisplay extends JPanel {
 			xCord /= new Double(graphWidth);
 			if (!new Double(yCordF).toString().contains("Infinity") && !new Double(yCordF).toString().equals("NaN")
 					&& yCordF != Double.NEGATIVE_INFINITY) {
-				if (lastX != null && lastYF != null) {
+				if (lastX != null && lastYF != null && lastYG != null) {
 					Polygon toDraw = new Polygon();
 					toDraw.addPoint(lastX, lastYF);
 					toDraw.addPoint(lastX, lastYG);
@@ -109,9 +109,9 @@ public class GraphDisplay extends JPanel {
 			double xCord = (x - shift) * new Double(graphPixelWidth);
 			xCord /= new Double(graphWidth);
 			if (lastX != null && lastY != null && !yCord.toString().equals("NaN")
-					&& Double.isFinite(yCord)) {
-				graph.drawLine(lastX, lastY, (int) xCord, yCord.intValue());
-				System.out.println(lastY + " " + yCord);
+					&& Double.isFinite(yCord) && Double.isFinite(lastY) && !lastY.toString().equals("NaN") && lastY>0) {
+					System.out.println(lastY);
+					graph.drawLine(lastX, lastY, (int) xCord, yCord.intValue());
 				}
 			lastX = (int) xCord;
 			if(!yCord.toString().equals("NaN")) {

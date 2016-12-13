@@ -14,6 +14,8 @@ public class Function {
 	public String baseFunction;
 	public General general;
 	public Simplify simplify;
+	Integer domainLowerLimit = null;
+	Integer domainUpperLimit = null;
 	
 	public Function(String function) {
 		this.baseFunction = function;
@@ -26,7 +28,11 @@ public class Function {
 	}
 	
 	public double getValueAt(double xCord) {
-		return value.getValueAt(xCord, 0);
+		if((domainLowerLimit != null && xCord < domainLowerLimit)||(domainUpperLimit != null && xCord > domainUpperLimit)) {
+			return Double.POSITIVE_INFINITY;
+		} else {
+			return value.getValueAt(xCord, 0);
+		}
 	}
 	
 	public void initModules() {
@@ -34,6 +40,11 @@ public class Function {
 		value = new Value(this);
 		simplify = new Simplify(this);
 		calculus = new GeneralCalculus(this);
+	}
+	
+	public void limitDomain(int lower, int upper) {
+		this.domainLowerLimit = lower;
+		this.domainUpperLimit = upper;
 	}
 	
 }
