@@ -55,7 +55,7 @@ public class Branch {
 			} 
 			if(partsIn == 0 && (functionPart.charAt(i) == '+' || functionPart.charAt(i) == '-')
 					&& i>0
-					&& (functionPart.charAt(i-1) == ')'||functionPart.charAt(i-1) == 'x')
+					&& (functionPart.charAt(i-1) == ')'||functionPart.charAt(i-1) == 'x'||Character.isDigit(functionPart.charAt(i-1)))
 					&& !General.isOpperator(functionPart.charAt(i-1))) {
 				createBases(i);
 				this.opperator = new Opperator(Character.toString(functionPart.charAt(i)));
