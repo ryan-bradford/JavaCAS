@@ -8,11 +8,13 @@ public class Branch {
 	Branch upper;
 	Opperator opperator;
 	String value;
+	String startFunction;
 	String functionPart;
 	boolean negative = false;
 
 	public Branch(String functionPart) {
 		this.functionPart = functionPart;
+		this.startFunction = functionPart;
 		removeParenthesis();
 		if(!functionPart.contains("+") && !functionPart.contains("-") && !functionPart.contains("*") && !functionPart.contains("/") && !functionPart.contains("^")) {
 			if(General.isFunction(functionPart)) {
@@ -149,5 +151,20 @@ public class Branch {
 			}
 		}
 		return true;
+	}
+	
+	public String toString() {
+		if(upper != null) {
+			return base.toString() + opperator.opp + upper.toString();
+		} else if(base != null) {
+			return opperator.opp + "(" +  base.toString() + ")";
+		} else {
+			if(negative) {
+				return "-" + value;
+			} else {
+				return value;
+			}
+			
+		}
 	}
 }

@@ -12,14 +12,13 @@ public class Area {
 		JFrame frame = new JFrame();
 		frame.setBounds(0, 0, 1280, 720);
 		frame.setVisible(true);
-		Function f = new Function("arctan(x)*(x*(x*162)^2)^2");
+		Function f = new Function("arctan(x+2)+2*x");
+		System.out.println(f.toString());
 		ArrayList<Function> array = new ArrayList<Function>();
 		array.add(f);
 		GraphDisplay display = new GraphDisplay(array);
 		frame.add(display);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		
 	}
 	
 }

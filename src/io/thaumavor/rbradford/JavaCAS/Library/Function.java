@@ -30,6 +30,10 @@ public class Function {
 		return this.baseFunction;
 	}
 	
+	public String toString() {
+		return branch.toString();
+	}
+	
 	public void setBaseFunction(String newFunction) {
 		this.baseFunction = newFunction;
 		this.branch = new Branch(baseFunction);
