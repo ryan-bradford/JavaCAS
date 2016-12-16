@@ -1,50 +1,38 @@
 package io.thaumavor.rbradford.JavaCAS.Library;
 
-import io.thaumavor.rbradford.JavaCAS.Library.FunctionTools.General;
-import io.thaumavor.rbradford.JavaCAS.Library.FunctionTools.Value;
-import io.thaumavor.rbradford.JavaCAS.Library.FunctionTools.Algebric.Change;
-import io.thaumavor.rbradford.JavaCAS.Library.FunctionTools.Algebric.Simplification.Simplify;
-import io.thaumavor.rbradford.JavaCAS.Library.FunctionTools.Calculus.GeneralCalculus;
+import io.thaumavor.rbradford.JavaCAS.Library.Algebric.Change;
+import io.thaumavor.rbradford.JavaCAS.Library.Calculus.GeneralCalculus;
+import io.thaumavor.rbradford.JavaCAS.Library.Tree.Branch;
 
 public class Function {
-
-	public Change change;
+	
+	private Branch branch;
+	private String baseFunction;
 	public GeneralCalculus calculus;
-	public Value value;
-	public String baseFunction;
-	public General general;
-	public Simplify simplify;
-	Integer domainLowerLimit = null;
-	Integer domainUpperLimit = null;
+	public Change change;
 	
-	public Function(String function) {
-		this.baseFunction = function;
-		general = new General();
-		initModules();
-	}
-
-	public double getValueAt(double xCord, double yCord) {
-		return value.getValueAt(xCord, yCord);
-	}
-	
-	public double getValueAt(double xCord) {
-		if((domainLowerLimit != null && xCord < domainLowerLimit)||(domainUpperLimit != null && xCord > domainUpperLimit)) {
-			return Double.POSITIVE_INFINITY;
-		} else {
-			return value.getValueAt(xCord, 0);
-		}
-	}
-	
-	public void initModules() {
-		change = new Change(this);
-		value = new Value(this);
-		simplify = new Simplify(this);
+	public Function(String baseFunction) {
+		this.baseFunction = baseFunction;
+		this.branch = new Branch(baseFunction);
 		calculus = new GeneralCalculus(this);
+		this.change = new Change(this);
 	}
 	
-	public void limitDomain(int lower, int upper) {
-		this.domainLowerLimit = lower;
-		this.domainUpperLimit = upper;
+	public double getValueAt(double x) {
+		return branch.getValue(x);
+	}
+	
+	public double getValueAt(double x, double y) {
+		return branch.getValue(x, y);
+	}
+	
+	public String getBaseFunction() {
+		return this.baseFunction;
+	}
+	
+	public void setBaseFunction(String newFunction) {
+		this.baseFunction = newFunction;
+		this.branch = new Branch(baseFunction);
 	}
 	
 }

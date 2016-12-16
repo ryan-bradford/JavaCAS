@@ -1,4 +1,4 @@
-package io.thaumavor.rbradford.JavaCAS.Library.FunctionTools.Calculus;
+package io.thaumavor.rbradford.JavaCAS.Library.Calculus;
 
 import io.thaumavor.rbradford.JavaCAS.Library.Function;
 

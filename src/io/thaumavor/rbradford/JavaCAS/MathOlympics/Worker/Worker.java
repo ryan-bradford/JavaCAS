@@ -59,7 +59,7 @@ public class Worker extends Thread {
 	public void doDeriv(Function x) {
 		double extremas = x.calculus.biggestDerivOfFunc(start, end, interval);
 		if (extremas > biggest && !undef(x)) {
-			biggestFunc = x.baseFunction;
+			biggestFunc = x.getBaseFunction();
 			timesChosen++;
 			if (timesChosen > 20) {
 				changeWeight(biggestFunc);
@@ -72,7 +72,7 @@ public class Worker extends Thread {
 	public void doExtremas(Function x) {
 		double extremas = x.calculus.getNumberOfExtremas(start, end, interval);
 		if (extremas > biggest && !undef(x)) {
-			biggestFunc = x.baseFunction;
+			biggestFunc = x.getBaseFunction();
 			timesChosen++;
 			if (timesChosen > 20) {
 				changeWeight(biggestFunc);
@@ -85,7 +85,7 @@ public class Worker extends Thread {
 	public void doIntegral(Function x) {
 		double integral = x.calculus.integralOfFunc(start, end, interval);
 		if (integral > biggest && !undef(x)) {
-			biggestFunc = x.baseFunction;
+			biggestFunc = x.getBaseFunction();
 			timesChosen++;
 			if (timesChosen > 20) {
 				changeWeight(biggestFunc);
