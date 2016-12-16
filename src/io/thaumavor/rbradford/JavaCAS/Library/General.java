@@ -30,7 +30,7 @@ public class General {
 		}
 	}
 
-	public boolean isOpperator(char stuff) {
+	public static boolean isOpperator(char stuff) {
 		if (stuff == '+' || stuff == '-' || stuff == '/' || stuff == '*' || stuff == '^' || stuff == '(' || stuff == ')'
 				|| stuff == 'n' || stuff == 's' || stuff == 'E') {
 			return true;

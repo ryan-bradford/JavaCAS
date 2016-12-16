@@ -9,7 +9,8 @@ public class Branch {
 	Opperator opperator;
 	String value;
 	String functionPart;
-	
+	boolean negative = false;
+
 	public Branch(String functionPart) {
 		this.functionPart = functionPart;
 		removeParenthesis();
@@ -29,7 +30,17 @@ public class Branch {
 			if(functionPart.charAt(i) == '(') {
 				this.opperator = new Opperator(functionPart.substring(0, i));
 				base = new Branch(functionPart.substring(i+1, functionPart.length() - 1));
+				return;
 			}
+		}
+		factorNegatives();
+	}
+	
+	public void factorNegatives() {
+		if(functionPart.charAt(0) == '-') {
+			base = new Branch(functionPart.substring(1, functionPart.length()));
+			base.negative = true;
+			opperator = new Opperator(" ");
 		}
 	}
 	
@@ -42,7 +53,10 @@ public class Branch {
 			} else if(functionPart.charAt(i) == ')') {
 				partsIn--;
 			} 
-			if(partsIn == 0 && (functionPart.charAt(i) == '+' || functionPart.charAt(i) == '-')) {
+			if(partsIn == 0 && (functionPart.charAt(i) == '+' || functionPart.charAt(i) == '-')
+					&& i>0
+					&& (functionPart.charAt(i-1) == ')'||functionPart.charAt(i-1) == 'x')
+					&& !General.isOpperator(functionPart.charAt(i-1))) {
 				createBases(i);
 				this.opperator = new Opperator(Character.toString(functionPart.charAt(i)));
 				return;
@@ -84,13 +98,17 @@ public class Branch {
 	}
 	
 	public double getValue(double x) {
+		double polarity = 1;
+		if(negative) {
+			polarity = -1;
+		}
 		if(value != null) {
-			return General.getValueOfPart(value, x, 0);
+			return polarity*General.getValueOfPart(value, x, 0);
 		} else {
 			if(upper != null) {
-				return opperator.useOpp(base.getValue(x), upper.getValue(x));
+				return polarity*opperator.useOpp(base.getValue(x), upper.getValue(x));
 			} else {
-				return opperator.useOpp(base.getValue(x), 0);
+				return polarity*opperator.useOpp(base.getValue(x), 0);
 			}
 		}
 	}
