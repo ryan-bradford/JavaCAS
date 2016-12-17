@@ -6,15 +6,20 @@ public class Branch {
 
 	Branch base;
 	Branch upper;
-	Opperator opperator;
+	Operator operator;
 	String value;
 	String startFunction;
 	String functionPart;
 	boolean negative = false;
-
-	public Branch(String functionPart) {
+	int numOfParenthesis = 0;
+	
+	protected Branch(String functionPart) {
 		this.functionPart = functionPart;
 		this.startFunction = functionPart;
+		initFunction();
+	}
+	
+	protected void initFunction() {
 		removeParenthesis();
 		if(!functionPart.contains("+") && !functionPart.contains("-") && !functionPart.contains("*") && !functionPart.contains("/") && !functionPart.contains("^")) {
 			if(General.isFunction(functionPart)) {
@@ -30,7 +35,7 @@ public class Branch {
 	public void splitFunction() {
 		for(int i = 0; i < functionPart.length(); i++) {
 			if(functionPart.charAt(i) == '(') {
-				this.opperator = new Opperator(functionPart.substring(0, i));
+				this.operator = new Operator(functionPart.substring(0, i));
 				base = new Branch(functionPart.substring(i+1, functionPart.length() - 1));
 				return;
 			}
@@ -42,7 +47,7 @@ public class Branch {
 		if(functionPart.charAt(0) == '-') {
 			base = new Branch(functionPart.substring(1, functionPart.length()));
 			base.negative = true;
-			opperator = new Opperator(" ");
+			operator = new Operator(" ");
 		}
 	}
 	
@@ -60,7 +65,7 @@ public class Branch {
 					&& (functionPart.charAt(i-1) == ')'||functionPart.charAt(i-1) == 'x'||Character.isDigit(functionPart.charAt(i-1)))
 					&& !General.isOpperator(functionPart.charAt(i-1))) {
 				createBases(i);
-				this.opperator = new Opperator(Character.toString(functionPart.charAt(i)));
+				this.operator = new Operator(Character.toString(functionPart.charAt(i)));
 				return;
 			}
 		}
@@ -73,7 +78,7 @@ public class Branch {
 			} 
 			if(partsIn == 0 && (functionPart.charAt(i) == '*' || functionPart.charAt(i) == '/')) {
 				createBases(i);
-				this.opperator = new Opperator(Character.toString(functionPart.charAt(i)));
+				this.operator = new Operator(Character.toString(functionPart.charAt(i)));
 				return;
 			}
 		}
@@ -85,7 +90,7 @@ public class Branch {
 			} 
 			if(partsIn == 0 && functionPart.charAt(i) == '^') {
 				createBases(i);
-				this.opperator = new Opperator(Character.toString(functionPart.charAt(i)));
+				this.operator = new Operator(Character.toString(functionPart.charAt(i)));
 				return;
 			}
 		}
@@ -108,9 +113,9 @@ public class Branch {
 			return polarity*General.getValueOfPart(value, x, 0);
 		} else {
 			if(upper != null) {
-				return polarity*opperator.useOpp(base.getValue(x), upper.getValue(x));
+				return polarity*operator.useOpp(base.getValue(x), upper.getValue(x));
 			} else {
-				return polarity*opperator.useOpp(base.getValue(x), 0);
+				return polarity*operator.useOpp(base.getValue(x), 0);
 			}
 		}
 	}
@@ -119,29 +124,28 @@ public class Branch {
 		if(value != null) {
 			return General.getValueOfPart(value, x, y);
 		} else {
-			return opperator.useOpp(base.getValue(x, y), upper.getValue(x, y));
+			return operator.useOpp(base.getValue(x, y), upper.getValue(x, y));
 		}
 	}
 	
 	public void removeParenthesis() {
-		int countsIn = 0;
+		numOfParenthesis = 0;
 		for(int i = 0; i < functionPart.length(); i++) {
 			if(functionPart.charAt(i) == '(') {
 				if(containsOnly('(', functionPart.substring(0, i))) {
-					countsIn++;
+					numOfParenthesis++;
 				}
 			} else if(functionPart.charAt(i) == ')') {
 				if(containsOnly(')', functionPart.substring(i, functionPart.length()))) {
 					break;
 				}
-				countsIn--;
+				numOfParenthesis--;
 			}
-			if(countsIn == 0 && i != functionPart.length() - 1) {
+			if(numOfParenthesis == 0 && i != functionPart.length() - 1) {
 				return;
 			}
 		}
-		countsIn += 0;
-		functionPart = functionPart.substring(countsIn, functionPart.length() - countsIn);
+		functionPart = functionPart.substring(numOfParenthesis, functionPart.length() - numOfParenthesis);
 	}
 	
 	public boolean containsOnly(char toCheck, String toUse) {
@@ -155,9 +159,15 @@ public class Branch {
 	
 	public String toString() {
 		if(upper != null) {
-			return base.toString() + opperator.opp + upper.toString();
+			String surrond = "";
+			String back = "";
+			for(int i = 0; i < numOfParenthesis; i++) {
+				surrond += "(";
+				back += ")";
+			}
+			return surrond + base.toString() + operator.opp + upper.toString() + back;
 		} else if(base != null) {
-			return opperator.opp + "(" +  base.toString() + ")";
+			return operator.opp + "(" +  base.toString() + ")";
 		} else {
 			if(negative) {
 				return "-" + value;
@@ -167,4 +177,21 @@ public class Branch {
 			
 		}
 	}
+	
+	public void simplify(String toUse, Operator action) {
+		if(operator == null) {
+			if(value.equals(toUse)) {
+				value = "1";
+			} else {
+				functionPart = value + action.opp + toUse;
+				this.splitAtOpperators();
+			}
+			return;
+		}
+		if(operator.level+1 == action.level) {
+			base.simplify(toUse, action);
+			upper.simplify(toUse, action);
+		} 
+	}
+	
 }

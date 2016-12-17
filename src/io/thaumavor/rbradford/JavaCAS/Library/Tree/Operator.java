@@ -1,11 +1,21 @@
 package io.thaumavor.rbradford.JavaCAS.Library.Tree;
 
-public class Opperator {
+public class Operator {
 
 	String opp;
+	int level; //+and- = 1, *and/ = 2, ^=3
 	
-	public Opperator(String string) {
+	public Operator(String string) {
 		this.opp = string;
+		if(opp.equals("+") || opp.equals("-")) {
+			level = 1;
+		} else if(opp.equals("/") || opp.equals("*")) {
+			level = 2;
+		} else if(opp.equals("^")) {
+			level = 3;
+		} else {
+			level = 4;
+		}
 	}
 	
 	public double useOpp(double one, double two) {
