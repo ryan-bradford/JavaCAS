@@ -19,7 +19,7 @@ public class Branch {
 		initFunction();
 	}
 	
-	public void intiFunction(String function) {
+	public void initFunction(String function) {
 		this.functionPart = function;
 		this.initFunction();
 	}
@@ -59,7 +59,7 @@ public class Branch {
 		if(functionPart.charAt(0) == '-') {
 			base = new Branch(functionPart.substring(1, functionPart.length()));
 			base.negative = true;
-			operator = new Operator(" ");
+			operator = new Operator("");
 		}
 	}
 	
@@ -193,7 +193,7 @@ public class Branch {
 	public void simplify(String toUse, Operator action) {
 		if(!simplifyDivision(toUse, action)&&!simplifyMultiplication(toUse, action)) {
 			if(upper == null) {
-				this.intiFunction(operator.opp + "(" + base.functionPart + ")" + action.opp + toUse);
+				this.initFunction(operator.opp + "(" + base.functionPart + ")" + action.opp + toUse);
 			} else {
 				base.simplify(toUse, action);
 				upper.simplify(toUse, action);
@@ -208,9 +208,9 @@ public class Branch {
 		if(operator != null) {
 			if(operator.opp.equals("/")) {
 				if(upper.functionPart.equals(toUse)) {
-					upper.intiFunction("1");
+					upper.initFunction("1");
 				} else {
-					base.intiFunction(base.functionPart + "*" + toUse);
+					base.initFunction(base.functionPart + "*" + toUse);
 				}
 				return true;
 			} else {
@@ -225,22 +225,28 @@ public class Branch {
 				}
 			}
 		} else {
-			this.intiFunction(value + action.opp + toUse);
+			this.initFunction(value + action.opp + toUse);
 			return true;
 		}
 		return false;
 	}
 	
 	public boolean simplifyDivision(String toUse, Operator action) {
-		if(operator == null && action.opp.equals("/")) {
-			if(value.equals(toUse) && action.opp.equals("/")) {
-				this.intiFunction("1");
+		if(!action.opp.equals("/")) {
+			return false;
+		}
+		if(operator == null) {
+			if(value.equals(toUse)) {
+				this.initFunction("1");
 			} else {
-				this.intiFunction(value + action.opp + toUse);
+				this.initFunction(value + action.opp + toUse);
 			}
 			return true;
-		} else if(operator != null && operator.opp.equals("/") && action.opp.equals("/")) {
+		} else if(operator != null && operator.opp.equals("/")) {
 			base.simplify(toUse, action);
+			return true;
+		} else if(operator != null && base.negative && base.functionPart.equals(toUse)) {
+			base.initFunction("-1");
 			return true;
 		}
 		return false;
