@@ -19,7 +19,19 @@ public class Branch {
 		initFunction();
 	}
 	
+	public void intiFunction(String function) {
+		this.functionPart = function;
+		this.initFunction();
+	}
+	
 	protected void initFunction() {
+		this.startFunction = functionPart;
+		base = null;
+		upper = null;
+		operator = null;
+		value = null;
+		negative = false;
+		numOfParenthesis = 0;
 		removeParenthesis();
 		if(!functionPart.contains("+") && !functionPart.contains("-") && !functionPart.contains("*") && !functionPart.contains("/") && !functionPart.contains("^")) {
 			if(General.isFunction(functionPart)) {
@@ -179,22 +191,59 @@ public class Branch {
 	}
 	
 	public void simplify(String toUse, Operator action) {
-		if(operator == null) {
-			if(value.equals(toUse) && action.opp.equals("/")) {
-				value = "1";
+		if(!simplifyDivision(toUse, action)&&!simplifyMultiplication(toUse, action)) {
+			if(upper == null) {
+				this.intiFunction(operator.opp + "(" + base.functionPart + ")" + action.opp + toUse);
 			} else {
-				functionPart = value + action.opp + toUse;
-				this.splitAtOpperators();
+				base.simplify(toUse, action);
+				upper.simplify(toUse, action);
 			}
-			return;
 		}
-		if(operator.level+1 == action.level) {
-			base.simplify(toUse, action);
-			upper.simplify(toUse, action);
+	}
+	
+	public boolean simplifyMultiplication(String toUse, Operator action) {
+		if(!action.opp.equals("*")) {
+			return false;
+		}
+		if(operator != null) {
+			if(operator.opp.equals("/")) {
+				if(upper.functionPart.equals(toUse)) {
+					upper.intiFunction("1");
+				} else {
+					base.intiFunction(base.functionPart + "*" + toUse);
+				}
+				return true;
+			} else {
+				if(upper != null) {
+					if(operator.level < action.level) {
+						upper.simplify(toUse, action);
+						base.simplify(toUse, action);
+						return true;
+					}
+				} else if(base != null) {
+					return true;
+				}
+			}
 		} else {
-			this.functionPart = "(" + this.toString() + ")" + action.opp + toUse;
-			this.splitAtOpperators();
+			this.intiFunction(value + action.opp + toUse);
+			return true;
 		}
+		return false;
+	}
+	
+	public boolean simplifyDivision(String toUse, Operator action) {
+		if(operator == null && action.opp.equals("/")) {
+			if(value.equals(toUse) && action.opp.equals("/")) {
+				this.intiFunction("1");
+			} else {
+				this.intiFunction(value + action.opp + toUse);
+			}
+			return true;
+		} else if(operator != null && operator.opp.equals("/") && action.opp.equals("/")) {
+			base.simplify(toUse, action);
+			return true;
+		}
+		return false;
 	}
 	
 }
