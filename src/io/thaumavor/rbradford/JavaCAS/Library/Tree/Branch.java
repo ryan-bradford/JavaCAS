@@ -180,7 +180,7 @@ public class Branch {
 	
 	public void simplify(String toUse, Operator action) {
 		if(operator == null) {
-			if(value.equals(toUse)) {
+			if(value.equals(toUse) && action.opp.equals("/")) {
 				value = "1";
 			} else {
 				functionPart = value + action.opp + toUse;
@@ -191,7 +191,10 @@ public class Branch {
 		if(operator.level+1 == action.level) {
 			base.simplify(toUse, action);
 			upper.simplify(toUse, action);
-		} 
+		} else {
+			this.functionPart = "(" + this.toString() + ")" + action.opp + toUse;
+			this.splitAtOpperators();
+		}
 	}
 	
 }
