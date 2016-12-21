@@ -55,15 +55,14 @@ public class Branch {
 				return;
 			}
 		}
-		factorNegatives();
 	}
 	
 	public void factorNegatives() {
 		if(functionPart.charAt(0) == '-') {
-			base = new Branch(functionPart.substring(1, functionPart.length()));
-			base.negative = true;
-			operator = new Operator("");
+			this.initFunction(functionPart.substring(1, functionPart.length()));
+			negative = true;
 		}
+		splitFunction();
 	}
 	
 	public void splitAtOpperators() {
@@ -109,7 +108,7 @@ public class Branch {
 				return;
 			}
 		}
-		splitFunction();
+		factorNegatives();
 	}
 	
 	public void createBases(int i) {

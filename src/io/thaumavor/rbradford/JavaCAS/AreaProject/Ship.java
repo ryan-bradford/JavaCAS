@@ -11,9 +11,16 @@ public class Ship {
 	
 	public Ship() {
 		functions = new ArrayList<Function>();
+		//initShip();
+		Function test = new Function("-abs(x)");
+		functions.add(test);
+	}
+	
+	public void initShip() {
 		initFlagpole();
 		initFlag();
 		initShipBase();
+		initWater();
 	}
 	
 	public void initFlag() {
@@ -44,6 +51,11 @@ public class Ship {
 		functions.add(upperDeck);
 		functions.add(lowerDeck);
 		functions.add(shipBottom);
+	}
+	
+	public void initWater() {
+		Function water = new Function("0.5*sin(10*x)-1");
+		functions.add(water);
 	}
 	
 	public ArrayList<Function> getFunctions() {
