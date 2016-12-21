@@ -22,8 +22,8 @@ public class GraphDisplay extends JPanel {
 	int startY = 0;
 	int graphWidth = 20;
 	int graphHeight = 20;
-	int graphPixelWidth = 1280;
-	int graphPixelHeight = 720;
+	int graphPixelWidth = 1920;
+	int graphPixelHeight = 1080;
 
 	public GraphDisplay(ArrayList<Function> function) {
 		this.function = function;

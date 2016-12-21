@@ -2,8 +2,9 @@ package io.thaumavor.rbradford.JavaCAS.Library.Tree;
 
 public class Operator {
 
-	String opp;
-	int level; //+and- = 1, *and/ = 2, ^=3
+	public String opp;
+	public int level; //+and- = 1, *and/ = 2, ^=3
+	boolean oddRoot = false;
 	
 	public Operator(String string) {
 		this.opp = string;
@@ -18,6 +19,10 @@ public class Operator {
 		}
 	}
 	
+	public void oddRoot(boolean isOdd) {
+		oddRoot = isOdd;
+	}
+	
 	public double useOpp(double one, double two) {
 		if(opp.equals("+")) {
 			return one + two;
@@ -28,7 +33,11 @@ public class Operator {
 		} else if(opp.equals("/")) {
 			return one / two;
 		} else if(opp.equals("^")) {
-			return Math.pow(one, two);
+			double temp = Math.pow(Math.abs(one), two);
+			if(oddRoot == true && one < 0) {
+				return -temp;
+			}
+			return temp;
 		} else if(opp.equals("sin")) {
 			return Math.sin(one);
 		} else if(opp.equals("cos")) {

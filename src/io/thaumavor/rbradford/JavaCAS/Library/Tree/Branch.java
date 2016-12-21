@@ -1,22 +1,25 @@
 package io.thaumavor.rbradford.JavaCAS.Library.Tree;
 
 import io.thaumavor.rbradford.JavaCAS.Library.General;
+import io.thaumavor.rbradford.JavaCAS.Library.Algebric.Simplify;
 
 public class Branch {
 
-	Branch base;
-	Branch upper;
-	Operator operator;
-	String value;
-	String startFunction;
-	String functionPart;
-	boolean negative = false;
-	int numOfParenthesis = 0;
+	public Branch base;
+	public Branch upper;
+	public Operator operator;
+	public String value;
+	public String startFunction;
+	public String functionPart;
+	public boolean negative = false;
+	public int numOfParenthesis = 0;
+	public Simplify simplify;
 	
 	protected Branch(String functionPart) {
 		this.functionPart = functionPart;
 		this.startFunction = functionPart;
 		initFunction();
+		this.simplify = new Simplify(this);
 	}
 	
 	public void initFunction(String function) {
@@ -125,6 +128,11 @@ public class Branch {
 			return polarity*General.getValueOfPart(value, x, 0);
 		} else {
 			if(upper != null) {
+				if(operator.opp.equals("^") && upper.operator != null && upper.operator.opp.equals("/")) {
+					if(upper.upper.getValue(x) % 2 == 1) {
+						operator.oddRoot(true);
+					}
+				}
 				return polarity*operator.useOpp(base.getValue(x), upper.getValue(x));
 			} else {
 				return polarity*operator.useOpp(base.getValue(x), 0);
@@ -136,6 +144,12 @@ public class Branch {
 		if(value != null) {
 			return General.getValueOfPart(value, x, y);
 		} else {
+			if(operator.opp.equals("^") && base.operator.opp.equals("/")) {
+				System.out.println(base.upper.getValue(x, y) % 2);
+				if(base.upper.getValue(x, y) % 2 == 1) {
+					operator.oddRoot(true);
+				}
+			}
 			return operator.useOpp(base.getValue(x, y), upper.getValue(x, y));
 		}
 	}
@@ -190,66 +204,5 @@ public class Branch {
 		}
 	}
 	
-	public void simplify(String toUse, Operator action) {
-		if(!simplifyDivision(toUse, action)&&!simplifyMultiplication(toUse, action)) {
-			if(upper == null) {
-				this.initFunction(operator.opp + "(" + base.functionPart + ")" + action.opp + toUse);
-			} else {
-				base.simplify(toUse, action);
-				upper.simplify(toUse, action);
-			}
-		}
-	}
-	
-	public boolean simplifyMultiplication(String toUse, Operator action) {
-		if(!action.opp.equals("*")) {
-			return false;
-		}
-		if(operator != null) {
-			if(operator.opp.equals("/")) {
-				if(upper.functionPart.equals(toUse)) {
-					upper.initFunction("1");
-				} else {
-					base.initFunction(base.functionPart + "*" + toUse);
-				}
-				return true;
-			} else {
-				if(upper != null) {
-					if(operator.level < action.level) {
-						upper.simplify(toUse, action);
-						base.simplify(toUse, action);
-						return true;
-					}
-				} else if(base != null) {
-					return true;
-				}
-			}
-		} else {
-			this.initFunction(value + action.opp + toUse);
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean simplifyDivision(String toUse, Operator action) {
-		if(!action.opp.equals("/")) {
-			return false;
-		}
-		if(operator == null) {
-			if(value.equals(toUse)) {
-				this.initFunction("1");
-			} else {
-				this.initFunction(value + action.opp + toUse);
-			}
-			return true;
-		} else if(operator != null && operator.opp.equals("/")) {
-			base.simplify(toUse, action);
-			return true;
-		} else if(operator != null && base.negative && base.functionPart.equals(toUse)) {
-			base.initFunction("-1");
-			return true;
-		}
-		return false;
-	}
 	
 }
