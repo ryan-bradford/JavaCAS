@@ -1,6 +1,7 @@
 package io.thaumavor.rbradford.JavaCAS.AreaProject;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
@@ -8,16 +9,17 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import io.thaumavor.rbradford.JavaCAS.AreaProject.Graphics.Area;
+import io.thaumavor.rbradford.JavaCAS.AreaProject.Graphics.Drawing;
+import io.thaumavor.rbradford.JavaCAS.AreaProject.Graphics.Rainbow;
 import io.thaumavor.rbradford.JavaCAS.Library.Function;
+import sun.security.pkcs11.wrapper.Functions;
 
 public class GraphDisplay extends JPanel {
 
 	ArrayList<Function> function;
-	boolean toDrawArea;
-	int lowerBound;
-	int upperBound;
-	int functionFIndex;
-	int functionGIndex;
+	ArrayList<Area> areas;
+	ArrayList<Drawing> drawings;
 	int startX = -10;
 	int startY = 0;
 	int graphWidth = 20;
@@ -25,37 +27,37 @@ public class GraphDisplay extends JPanel {
 	int graphPixelWidth = 1920;
 	int graphPixelHeight = 1080;
 
-	public GraphDisplay(ArrayList<Function> function) {
-		this.function = function;
+	public GraphDisplay(ArrayList<Drawing> drawings) {
+		this.drawings = drawings;
 		this.setBounds(0, 0, graphPixelWidth, graphPixelWidth);
 		// this.setBackground(Color.BLACK);
 	}
 
-	public GraphDisplay(ArrayList<Function> function, int lowerBound, int upperBound, int functionF, int functionG) {
-		toDrawArea = true;
-		this.function = function;
-		this.lowerBound = lowerBound;
-		this.upperBound = upperBound;
-		this.functionFIndex = functionF;
-		this.functionGIndex = functionG;
-		this.setBounds(0, 0, graphPixelWidth, graphPixelWidth);
-	}
-
 	@Override
 	protected void paintComponent(Graphics g) {
-		if (toDrawArea) {
-			drawArea(function.get(functionFIndex), function.get(functionGIndex), g);
-		}
-		for (Function f : function) {
-			drawFunction(f, g);
+		for (Drawing drawing : drawings) {
+			function = drawing.getFunctions();
+			areas = drawing.getAreas();
+
+			for (Function f : function) {
+				drawFunction(f, g);
+			}
+			if (areas != null) {
+				for(Area area: areas) {
+					drawArea(area.getF(), area.getG(), g, area.getLowerBound(), area.getUpperBound(), area.getColor(), area.getInterval());
+				}
+			}
 		}
 	}
 
-	public void drawArea(Function f, Function g, Graphics graph) {
+	public void drawArea(Function f, Function g, Graphics graph, double lowerBound, double upperBound, Color toColor, Double intervalScale) {
 		Integer lastX = null;
 		Integer lastYG = null;
 		Integer lastYF = null;
-		double interval = new Double(graphWidth) * new Double(upperBound - lowerBound) / new Double(graphPixelWidth);
+		Double interval = new Double(graphWidth)/ new Double(graphPixelWidth);
+		if(intervalScale != null) {
+			interval *= intervalScale;
+		}
 		for (double x = lowerBound; x < (upperBound); x += interval) {
 			double yCordF = f.getValueAt(x);
 			yCordF *= -1;
@@ -78,23 +80,31 @@ public class GraphDisplay extends JPanel {
 					toDraw.addPoint(lastX, lastYG);
 					toDraw.addPoint((int) xCord, (int) yCordG);
 					toDraw.addPoint((int) xCord, (int) yCordF);
-					graph.setColor(Rainbow.getNextColor());
+					if(toColor == null) {
+						graph.setColor(Rainbow.getNextColor());
+					} else {
+						graph.setColor(toColor);
+					}
 					graph.fillPolygon(toDraw);
 				}
 			}
 			lastX = (int) xCord;
-			if(!Double.toString(yCordF).equals("NaN")) {
-				lastYF = (int)yCordF;
-			}			
-			if(!Double.toString(yCordG).equals("NaN")) {
-				lastYG = (int)yCordG;
-			}	
+			if (!Double.toString(yCordF).equals("NaN")) {
+				lastYF = (int) yCordF;
+			}
+			if (!Double.toString(yCordG).equals("NaN")) {
+				lastYG = (int) yCordG;
+			}
 		}
 	}
 
 	public void drawFunction(Function f, Graphics graph1) {
 		Graphics2D graph = (Graphics2D) graph1;
-		graph.setColor(Rainbow.getRandom());
+		Color toSet = f.getColor();
+		if (toSet == null) {
+			toSet = Rainbow.getRandom();
+		}
+		graph.setColor(toSet);
 		graph.setStroke(new BasicStroke(5));
 		Integer lastX = null;
 		Integer lastY = null;
@@ -108,15 +118,15 @@ public class GraphDisplay extends JPanel {
 			double shift = (new Double(startX));
 			double xCord = (x - shift) * new Double(graphPixelWidth);
 			xCord /= new Double(graphWidth);
-			if (lastX != null && lastY != null && !yCord.toString().equals("NaN")
-					&& Double.isFinite(yCord) && Double.isFinite(lastY) && !lastY.toString().equals("NaN") && lastY>0) {
-					graph.drawLine(lastX, lastY, (int) xCord, yCord.intValue());
-				}
+			if (lastX != null && lastY != null && !yCord.toString().equals("NaN") && Double.isFinite(yCord)
+					&& Double.isFinite(lastY) && !lastY.toString().equals("NaN") && lastY > 0) {
+				graph.drawLine(lastX, lastY, (int) xCord, yCord.intValue());
+			}
 			lastX = (int) xCord;
-			if(!yCord.toString().equals("NaN")) {
+			if (!yCord.toString().equals("NaN")) {
 				lastY = yCord.intValue();
 			}
-			
+
 		}
 	}
 

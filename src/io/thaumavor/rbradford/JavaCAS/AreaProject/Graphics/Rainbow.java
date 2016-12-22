@@ -1,4 +1,4 @@
-package io.thaumavor.rbradford.JavaCAS.AreaProject;
+package io.thaumavor.rbradford.JavaCAS.AreaProject.Graphics;
 
 import java.awt.Color;
 

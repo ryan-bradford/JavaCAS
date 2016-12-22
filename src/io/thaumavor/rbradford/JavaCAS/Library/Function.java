@@ -1,5 +1,7 @@
 package io.thaumavor.rbradford.JavaCAS.Library;
 
+import java.awt.Color;
+
 import io.thaumavor.rbradford.JavaCAS.Library.Algebric.Change;
 import io.thaumavor.rbradford.JavaCAS.Library.Algebric.Simplfication.Expand;
 import io.thaumavor.rbradford.JavaCAS.Library.Calculus.GeneralCalculus;
@@ -11,10 +13,11 @@ public class Function extends Branch {
 	public GeneralCalculus calculus;
 	public Change change;
 	public Expand expand;
-	Double lowX;
-	Double highX;
-	Double lowY;
-	Double highY;
+	private Double lowX;
+	private Double highX;
+	private Double lowY;
+	private Double highY;
+	private Color color = null;
 	
 	public Function(String baseFunction) {
 		super(baseFunction);
@@ -64,6 +67,14 @@ public class Function extends Branch {
 	public void limitRange(double lowY, double highY) {
 		this.lowY = lowY;
 		this.highY = highY;
+	}
+	
+	public void setColor(Color toSet) {
+		this.color = toSet;
+	}
+	
+	public Color getColor() {
+		return color;
 	}
 	
 }
