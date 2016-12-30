@@ -34,8 +34,10 @@ public class Operator {
 			return one / two;
 		} else if(opp.equals("^")) {
 			double temp = Math.pow(Math.abs(one), two);
-			if(oddRoot == true && one < 0) {
+			if(oddRoot == true && one < 0 && two < 1 && two > -1) {
 				return -temp;
+			} else if(oddRoot == false && one < 0 && two < 1 && two > -1) {
+				return Double.POSITIVE_INFINITY;
 			}
 			return temp;
 		} else if(opp.equals("sin")) {

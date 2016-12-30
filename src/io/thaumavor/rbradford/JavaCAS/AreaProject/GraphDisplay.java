@@ -119,7 +119,7 @@ public class GraphDisplay extends JPanel {
 			double xCord = (x - shift) * new Double(graphPixelWidth);
 			xCord /= new Double(graphWidth);
 			if (lastX != null && lastY != null && !yCord.toString().equals("NaN") && Double.isFinite(yCord)
-					&& Double.isFinite(lastY) && !lastY.toString().equals("NaN") && lastY > 0) {
+					&& Double.isFinite(lastY) && lastY < 10000 && !lastY.toString().equals("NaN") && lastY > 0) {
 				graph.drawLine(lastX, lastY, (int) xCord, yCord.intValue());
 			}
 			lastX = (int) xCord;

@@ -18,6 +18,7 @@ public class Ship extends Drawing {
 		initFlag();
 		initShipBase();
 		initWater();
+		drawCloud();
 	}
 	
 	public void initFlag() {
@@ -71,6 +72,22 @@ public class Ship extends Drawing {
 		
 		Area filledWater = new Area(water, new Function("-10"), Color.BLUE, -10.0, 10.0);
 		shadedParts.add(filledWater);
+	}
+	
+	public void drawCloud() {
+		Function cloudTop = new Function("(4-(x-5)^2+1*sin(4*x-5))^(1/2)+5");
+		Function cloudBottom = new Function("-((4-(x-5)^2+1*sin(4*x-5))^(1/2))+5.3");
+		functions.add(cloudTop);
+		functions.add(cloudBottom);
+		cloudTop.setColor(Color.BLACK);
+		cloudBottom.setColor(Color.BLACK);
+		
+		Function cloudTop2 = new Function("(4-(x+5)^2+1*sin(2*x+5))^(1/2)+5");
+		Function cloudBottom2 = new Function("-((4-(x+5)^2+1*sin(2*x+5))^(1/2))+5.4");
+		functions.add(cloudTop2);
+		functions.add(cloudBottom2);
+		cloudTop2.setColor(Color.BLACK);
+		cloudBottom2.setColor(Color.BLACK);
 	}
 	
 	public ArrayList<Function> getFunctions() {
