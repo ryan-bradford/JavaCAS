@@ -4,7 +4,7 @@ public class Operator {
 
 	public String opp;
 	public int level; //+and- = 1, *and/ = 2, ^=3
-	boolean oddRoot = false;
+	boolean oddRoot =  false;
 	
 	public Operator(String string) {
 		this.opp = string;
@@ -34,12 +34,18 @@ public class Operator {
 			return one / two;
 		} else if(opp.equals("^")) {
 			double temp = Math.pow(Math.abs(one), two);
-			if(oddRoot == true && one < 0 && two < 1 && two > -1) {
-				return -temp;
-			} else if(oddRoot == false && one < 0 && two < 1 && two > -1) {
-				return Double.POSITIVE_INFINITY;
+			if(one < 0) {
+				if(oddRoot == false) {
+					if(two % 1 == 0) {
+						return temp;
+					}
+					return Double.POSITIVE_INFINITY;
+				} else {
+					return -temp;
+				}
+			} else {
+				return temp;
 			}
-			return temp;
 		} else if(opp.equals("sin")) {
 			return Math.sin(one);
 		} else if(opp.equals("cos")) {

@@ -128,8 +128,21 @@ public class Branch {
 		} else {
 			if(upper != null) {
 				if(operator.opp.equals("^") && upper.operator != null && upper.operator.opp.equals("/")) {
-					if(upper.upper.getValue(x) % 2 == 1) {
+					double upperVal = upper.upper.getValue(x);
+					double lowerVal = upper.base.getValue(x);
+					if(upperVal > lowerVal) {
+						upperVal /= lowerVal;
+						lowerVal = 1;
+					} else {
+						lowerVal /= upperVal;
+						upperVal = 1;
+					}
+					if(upperVal != 1.0 && upperVal % 2.0 == 1.0) {
 						operator.oddRoot(true);
+					} else if(lowerVal != 1.0 && lowerVal % 2.0 == 1.0) {
+						operator.oddRoot(true);
+					} else {
+						operator.oddRoot(false);
 					}
 				}
 				return polarity*operator.useOpp(base.getValue(x), upper.getValue(x));

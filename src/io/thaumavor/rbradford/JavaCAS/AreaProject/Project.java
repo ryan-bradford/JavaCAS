@@ -12,6 +12,12 @@ public class Project {
 	
 	
 	public static void main(String[] args) {
+		//Function hi = new Function("0.5*(x+0.25)^2-1");
+		//System.out.println(hi.getValue(-3));
+		new Project();
+	}
+	
+	public Project() {
 		Ship toDraw = new Ship();
 		JFrame frame = new JFrame();
 		frame.setBounds(0, 0, 1920, 1080);
