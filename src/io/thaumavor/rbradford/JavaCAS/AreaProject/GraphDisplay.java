@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -24,8 +25,8 @@ public class GraphDisplay extends JPanel {
 	int startY = 0;
 	int graphWidth = 20;
 	int graphHeight = 20;
-	int graphPixelWidth = 1920;
-	int graphPixelHeight = 1080;
+	int graphPixelWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+	int graphPixelHeight = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
 	public GraphDisplay(ArrayList<Drawing> drawings) {
 		this.drawings = drawings;
@@ -35,6 +36,13 @@ public class GraphDisplay extends JPanel {
 
 	@Override
 	protected void paintComponent(Graphics g) {
+		g.create();
+		Graphics2D g1 = (Graphics2D) g;
+		g1.setStroke(new BasicStroke(2));
+		g1.drawLine(0, graphPixelHeight/2, graphPixelWidth, graphPixelHeight/2);
+		g1.drawString("X", 20, graphPixelHeight/2-15);
+		g1.drawLine(graphPixelWidth/2, 0, graphPixelWidth/2, graphPixelHeight/2);
+		g1.drawString("Y", graphPixelWidth/2-15, 20);
 		for (Drawing drawing : drawings) {
 			function = drawing.getFunctions();
 			areas = drawing.getAreas();

@@ -1,5 +1,6 @@
 package io.thaumavor.rbradford.JavaCAS.AreaProject;
 
+import java.awt.Toolkit;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -20,7 +21,7 @@ public class Project {
 	public Project() {
 		Ship toDraw = new Ship();
 		JFrame frame = new JFrame();
-		frame.setBounds(0, 0, 1920, 1080);
+		frame.setBounds(0, 0, (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(), (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight());
 		frame.setVisible(true);
 		ArrayList<Drawing> drawings = new ArrayList<Drawing>();
 		drawings.add(toDraw);

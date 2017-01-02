@@ -1,7 +1,7 @@
 package io.thaumavor.rbradford.JavaCAS.AreaProject.Graphics;
 
 import java.awt.Color;
-import java.awt.image.AreaAveragingScaleFilter;
+
 import java.util.ArrayList;
 
 import io.thaumavor.rbradford.JavaCAS.Library.Function;
@@ -66,16 +66,25 @@ public class Ship extends Drawing {
 	}
 	
 	public void initWater() {
-		Function water = new Function("0.5*sin(10*x)-1");
-		functions.add(water);
-		water.setColor(Color.BLUE);
+		Function waterFirst = new Function("0.5*sin(10*x)+cos(x)*sin(x)-1");
+		waterFirst.limitDomain(-10, 0);
+		functions.add(waterFirst);
+		waterFirst.setColor(Color.BLUE);
 		
-		Area filledWater = new Area(water, new Function("-10"), Color.BLUE, -10.0, 10.0);
-		shadedParts.add(filledWater);
+		Area filledWaterFirst = new Area(waterFirst, new Function("-10"), Color.BLUE, -10.0, 0);
+		shadedParts.add(filledWaterFirst);
+		
+		Function waterSecond = new Function("0.5*sin(10*x)+cos(x)-(sin(x)+1)");
+		waterSecond.limitDomain(-.01, 10);
+		functions.add(waterSecond);
+		waterSecond.setColor(Color.BLUE);
+		
+		Area filledWaterSecond = new Area(waterSecond, new Function("-10"), Color.BLUE, -0.1, 10);
+		shadedParts.add(filledWaterSecond);
 	}
 	
 	public void drawCloud() {
-		Function cloudTop = new Function("(4-(x-5)^2+1*sin(4*x-5))^(1/2)+5");
+		Function cloudTop = new Function("(4-(x-5)^2+sin(4*x-5))^(1/2)+5");
 		Function cloudBottom = new Function("-((4-(x-5)^2+1*sin(4*x-5))^(1/2))+5.3");
 		functions.add(cloudTop);
 		functions.add(cloudBottom);
