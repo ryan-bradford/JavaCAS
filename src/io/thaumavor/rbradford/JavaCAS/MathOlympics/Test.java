@@ -1,24 +1,19 @@
 package io.thaumavor.rbradford.JavaCAS.MathOlympics;
 
-import javax.swing.JOptionPane;
-
 import io.thaumavor.rbradford.JavaCAS.Library.Function;
+
+import javax.swing.*;
 
 public class Test {
 		
 	double interval = .01;
 
-	public static void main(String[] args) {
-		new Test();
+	public Test() {
+		standardStart();
 	}
 
-	public Test() {
-		//Worker x = new Worker(0, 0, interval, interval, interval, null, interval, null);
-		standardStart();
-		//Function x = new Function("(x*1)^(1.5)+1+(x*1)^(1.5)/(x*1)");
-		//System.out.println(x.getValueAt(2));
-		//x.simplify.simplify();
-		//System.out.println(x.getValueAt(2));
+	public static void main(String[] args) {
+		new Test();
 	}
 	
 	public void standardStart() {
@@ -87,7 +82,7 @@ public class Test {
 		Function text = new Function(entered);
 		Double start = Double.parseDouble(JOptionPane.showInputDialog("Start x"));
 		Double end = Double.parseDouble(JOptionPane.showInputDialog("End x"));
-		Double interval = .0001;
+		Double interval = .00001;
 		JOptionPane.showMessageDialog(null, "The # from " + start + " to " + end + " is: " + text.calculus.getNumberOfExtremas(start, end, interval));
 	}
 

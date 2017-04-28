@@ -1,7 +1,7 @@
 package io.thaumavor.rbradford.JavaCAS.Library.Tree;
 
-import io.thaumavor.rbradford.JavaCAS.Library.General;
 import io.thaumavor.rbradford.JavaCAS.Library.Algebric.Simplify;
+import io.thaumavor.rbradford.JavaCAS.Library.General;
 
 public class Branch {
 
@@ -14,8 +14,12 @@ public class Branch {
 	public boolean negative = false;
 	public int numOfParenthesis = 0;
 	public Simplify simplify;
-	
+
 	protected Branch(String functionPart) {
+		init(functionPart);
+	}
+
+	public void init(String functionPart) {
 		this.functionPart = functionPart;
 		this.startFunction = functionPart;
 		initFunction();
@@ -214,6 +218,57 @@ public class Branch {
 			}
 			
 		}
+	}
+
+	public void injectFunction(String func, Operator opp, int levels) {
+		if (levels == 0) {
+			this.upper = new Branch(this.startFunction);
+			this.base = new Branch(func);
+			this.operator = opp;
+		} else {
+			this.base.injectFunction(func, opp, levels - 1);
+		}
+	}
+
+	public boolean replaceX(String func) {
+		if (value != null && value.equals("x")) {
+			init(func);
+			return true;
+		} else {
+			double storage = Math.random();
+			if (storage > .5) {
+				if (base != null) {
+					boolean returned = base.replaceX(func);
+					if (returned == true) {
+						return true;
+					}
+				}
+			} else {
+				if (upper != null) {
+					boolean returned = upper.replaceX(func);
+					if (returned == true) {
+						return true;
+					}
+				}
+			}
+			if (storage > .5) {
+				if (upper != null) {
+					boolean returned = upper.replaceX(func);
+					if (returned == true) {
+						return true;
+					}
+				}
+			} else {
+				if (base != null) {
+					boolean returned = base.replaceX(func);
+					if (returned == true) {
+						return true;
+					}
+				}
+			}
+
+		}
+		return false;
 	}
 	
 	

@@ -1,22 +1,14 @@
 package io.thaumavor.rbradford.JavaCAS.AreaProject;
 
-import java.awt.Toolkit;
-import java.util.ArrayList;
-
-import javax.swing.JFrame;
-
 import io.thaumavor.rbradford.JavaCAS.AreaProject.Graphics.Drawing;
 import io.thaumavor.rbradford.JavaCAS.AreaProject.Graphics.Ship;
-import io.thaumavor.rbradford.JavaCAS.Library.Function;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class Project {
 	
-	
-	public static void main(String[] args) {
-		//Function hi = new Function("0.5*(x+0.25)^2-1");
-		//System.out.println(hi.getValue(-3));
-		new Project();
-	}
 	
 	public Project() {
 		Ship toDraw = new Ship();
@@ -29,5 +21,9 @@ public class Project {
 		frame.add(display);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	
+
+	public static void main(String[] args) {
+		new Project();
+	}
+
 }

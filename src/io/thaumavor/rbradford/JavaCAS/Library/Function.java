@@ -1,18 +1,18 @@
 package io.thaumavor.rbradford.JavaCAS.Library;
 
-import java.awt.Color;
-
 import io.thaumavor.rbradford.JavaCAS.Library.Algebric.Change;
 import io.thaumavor.rbradford.JavaCAS.Library.Algebric.Simplfication.Expand;
 import io.thaumavor.rbradford.JavaCAS.Library.Calculus.GeneralCalculus;
 import io.thaumavor.rbradford.JavaCAS.Library.Tree.Branch;
 
+import java.awt.*;
+
 public class Function extends Branch {
 	
-	private String baseFunction;
 	public GeneralCalculus calculus;
 	public Change change;
 	public Expand expand;
+	private String baseFunction;
 	private Double lowX;
 	private Double highX;
 	private Double lowY;
@@ -46,13 +46,13 @@ public class Function extends Branch {
 		return baseFunction;
 	}
 	
-	public String toString() {
-		return super.toString();
-	}
-	
 	public void setBaseFunction(String newFunction) {
 		this.baseFunction = newFunction;
 		this.initFunction();
+	}
+
+	public String toString() {
+		return super.toString();
 	}
 	
 	public void simplfiy() {
@@ -69,12 +69,12 @@ public class Function extends Branch {
 		this.highY = highY;
 	}
 	
-	public void setColor(Color toSet) {
-		this.color = toSet;
-	}
-	
 	public Color getColor() {
 		return color;
+	}
+
+	public void setColor(Color toSet) {
+		this.color = toSet;
 	}
 	
 }
