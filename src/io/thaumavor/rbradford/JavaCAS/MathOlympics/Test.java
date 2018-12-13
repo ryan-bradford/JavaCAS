@@ -1,5 +1,6 @@
 package io.thaumavor.rbradford.JavaCAS.MathOlympics;
 
+import io.thaumavor.rbradford.JavaCAS.AreaProject.Project;
 import io.thaumavor.rbradford.JavaCAS.Library.Function;
 
 import javax.swing.*;
@@ -10,6 +11,7 @@ public class Test {
 
 	public Test() {
 		standardStart();
+		//new Project(new Function("e^(5*x)"), new Function("e^(x)"));
 	}
 
 	public static void main(String[] args) {

@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import io.thaumavor.rbradford.JavaCAS.AreaProject.Graphics.Area;
 import io.thaumavor.rbradford.JavaCAS.AreaProject.Graphics.Drawing;
 import io.thaumavor.rbradford.JavaCAS.AreaProject.Graphics.Rainbow;
+import io.thaumavor.rbradford.JavaCAS.AreaProject.Graphics.SimpleFunctionGraph;
 import io.thaumavor.rbradford.JavaCAS.Library.Function;
 import sun.security.pkcs11.wrapper.Functions;
 
@@ -32,6 +33,18 @@ public class GraphDisplay extends JPanel {
 		this.drawings = drawings;
 		this.setBounds(0, 0, graphPixelWidth, graphPixelWidth);
 		// this.setBackground(Color.BLACK);
+	}
+
+	public GraphDisplay(Function toGraph) {
+		this.drawings = new ArrayList<Drawing>();
+		drawings.add(new SimpleFunctionGraph(toGraph));
+		this.setBounds(0, 0, graphPixelWidth, graphPixelWidth);
+	}
+
+	public GraphDisplay(Function f, Function g) {
+		this.drawings = new ArrayList<Drawing>();
+		drawings.add(new SimpleFunctionGraph(f, g));
+		this.setBounds(0, 0, graphPixelWidth, graphPixelWidth);
 	}
 
 	@Override

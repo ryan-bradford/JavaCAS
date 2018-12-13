@@ -46,7 +46,7 @@ public class Worker extends Thread {
 				storage.add(newFunc);
 				try {
 					Function x = storage.get(storage.size() - 1);
-					doIntegral(x);
+					doDeriv(x);
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
@@ -67,7 +67,9 @@ public class Worker extends Thread {
 				generator.changeWeight(biggestFunc);
 				timesChosen = 0;
 			}
-			biggest = extremas;
+			if(!Double.isInfinite(extremas)) {
+				biggest = extremas;
+			}
 		}
 	}
 	
